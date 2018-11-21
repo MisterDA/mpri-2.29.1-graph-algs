@@ -470,6 +470,111 @@ Condition: \[\sum_{x \in I} \varphi(I) \geq 1\]
 Corollary. \[\chi_f(G) \leq \chi(G)\]
 \[\chi_f(G) \geq \frac{|V(G)|}{\alpha(G)}\]
 
+\subsubsection{Intersection graphs}
+Vertices: sets or structures.
+Edges: \(S \sim S' \Leftrightarrow S \text{ intersects/not intersects } S'\).
+
+Examples: interval graphs, unit (proper) interval graphs, box graphs,
+generalization using trees, …
+
+\subsubsection{Permutation graphs}
+\subsubsection{Kreser graph \(K(n, k)\)}
+Vertices: \(k\)-subsets of \(\{1, \dots, n\}\).
+Edges: \(A \sim B \Leftrightarrow A \cap B = \emptyset\)
+
+\[\chi_f(G) = \inf\left\{ \frac{n}{k} |G \to K(n, k)\right\}\]
+
+Maximum independent set? Chromatic number? Relation to the fractional chromatic
+number.
+
+Project: present a proof of Erdos-Ka-Rado theorem.
+
+\subsubsection{Secondaty greedy coloring}
+Largest independent set: \(I_1 \to\) color class \(1\).  \(G := G \setminus I_1\).
+Largest independent set: \(I_2 \to\) color class \(1\).  \(G := G \setminus I_2\).
+
+This algorithm might be better than the greedy coloring in average, but it may
+still produce a coloring with many more colors than one may need.
+
+Observation.  While \(k\)-coloring and \(H\)-coloring problems are NP-hard,
+there might be nice algorithms if inputs are restricted by some structural
+properties.
+
+Example:
+\begin{itemize}
+\item \(4\)-coloring planar graphs;
+\item \(3\)-coloring triangle-free planar graphs.  Chromatic number of interval
+  graphs, \(P_4\)-free graphs, permutation graphs, graphs of bounded tree-width,
+  …
+\end{itemize}
+
+\subsubsection{Duality of coloring and minor theories}
+Graphs with no \(K_3\) minors?
+
+Stronger connection between coloring and minor theory is provided through
+extended notion of signed graphs: \((G, \delta)\), where \(\delta\) is an
+assignment of \(+\) or \(-\) to the edges of \(G\).
+
+Analogue of independence number for edge-coloring.  A matching is a set of edges
+no two of have a common vertex.  \(\nu(G)\) denotes the maximum size of a matching
+in \(G\).  A perfect matching is a matching that covers all vertices.
+
+A related parameter: vertex cover.  A set of vertices which intersect every
+edge.  \(\tau(G)\) denotes the minimum size of a vertex cover of \(G\).
+
+Observation: \(\tau(G) \geq \nu(G)\).
+
+\begin{theorem}
+  For any bipartite graph we have \(\nu(G) = \tau(G)\).
+\end{theorem}
+
+\begin{proof}
+  Suppose that \(G\) is a bipartite graph with at least one edge (otherwise
+  \(\nu = \tau = 0\)).
+
+  Claim: there exists a vertex \(u \in \nu(G)\) which belongs to every maximum
+  matching.
+
+  Lets prove the claim.  Let \(uv\) be an edge.  Assume to the contrary that for
+  every vertex there exists a maximum matching missing that vertex.  Let \(M_u\)
+  be the maximum matching missing \(u\) and \(M_v\) be the maximum matching
+  missing \(v\).  Then, \(M_u\) must contain an edge \(e\) incident to \(v\).
+
+  Consider \(M_u \cup M_v\) and the component \(P\) containing vertex \(u\).
+  Note that:
+  \begin{enumerate}
+  \item \(P\) is a path (why not an even cycle?)
+  \item \(P\) starts at \(u\) but cannot end at \(v\) (why?)
+  \item \(P\) cannot end in blue.
+  \end{enumerate}
+  In \(M_v\) switch edges of \(P\) and add \(uv\) to get larger matching.
+
+  Now, we'll prove the theorem by induction on \(\nu(G)\).
+  If \(\nu(G)=0\) (i.e. \(G\) has no edges) then \(\tau(G)=0\) and done.
+  Suppose \(\nu(G) = \tau(G)\) whenever \(G\) is bipartite and \(\nu(G) \leq k -
+  1\).  Suppose \(G\) is bipartite and \(\nu(G) = k\).  Let \(u\) be a vertex
+  which belongs to any maximum matching.  Thus, \(\nu(G\setminus u = k - 1)\).
+  By induction, \(G\setminus u\) has a vertex cover \(C\) of size \(k - 1\).
+  Then \(C \cup \{u\}\) is a vertex cover of size \(k\).  Thus \(\tau(G) \leq
+  \nu(G)\) for bipartite graphs.  However \(\tau(G) \geq \nu(G)\) holds for all
+  graphs, thus \(\tau(G) = \nu(G)\) for bipartite graphs.
+\end{proof}
+
+Corollary: every \(k\)-regular bipartite graph has a perfect matching.
+\begin{proof}
+  Singe \(G\) is regular, the tow parts have a same number of vertices, say
+  \(n\) (i.e. \(|\nu(G)|=2n\)).  Thus \(G\) has exactly \(kn\) edges.  Let \(C\)
+  be a vertex cover of size \(\tau(G)\).  Each vertex covers exactly \(k\)
+  edges, thus \(\tau(G)\) vertices covers at most \(k \tau(G)\) edges.  Thus,
+  \(k \tau(G) \geq k n \Rightarrow \tau(G) \geq n \Rightarrow \nu(G) \geq n
+  \Rightarrow \nu(G) = n\).
+\end{proof}
+
+Corollary: every \(k\)-regular bipartite graph has an edge-chromatic number of
+exactly \(k\).
+
+Corollary: for every bipartite graph, \(\chi'(G) = \Delta(G)\).
+
 \section{Introduction to Minors, TreeWidth and FPT algorithms}
 \section{Spectral graph theory}
 
