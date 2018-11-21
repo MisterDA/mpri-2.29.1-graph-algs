@@ -44,8 +44,8 @@ relation.
 A graph composed of \(n\) vertices is stored as a \(n \times n\) adjacency
 boolean matrix, where
 \[a_{i, j} = \begin{cases}
-    0 & \text{if } v_i \not~ v_j\\
-    1 & \text{if } v_i ~ v_j
+    0 & \text{if } v_i \not\sim v_j\\
+    1 & \text{if } v_i \sim v_j
   \end{cases}\]
 
 \subsection{The four-color theorem}
@@ -152,23 +152,25 @@ Project. Prove that every 2-connected graph admits a nowhere zero 6-flow.
 
 \subsection{Proper coloring}
 
-\begin{tikzpicture}
-  \node[draw, thick] (a) {\textcolor{red}{1}};
-  \node[draw, thick, below=of a] (b) {\textcolor{red}{1}};
-  \node[draw, thick, right=of a] (c) {\textcolor{green}{2}};
-  \node[draw, thick, below=of c] (d) {\textcolor{green}{2}};
-  \draw (b) to (c) to (a) to (d);
-\end{tikzpicture}
+\begin{center}
+  \begin{tikzpicture}
+    \node[draw, thick] (a) {\textcolor{red}{1}};
+    \node[draw, thick, below=of a] (b) {\textcolor{red}{1}};
+    \node[draw, thick, right=of a] (c) {\textcolor{green}{2}};
+    \node[draw, thick, below=of c] (d) {\textcolor{green}{2}};
+    \draw (b) to (c) to (a) to (d);
+  \end{tikzpicture}
+\end{center}
 
 The chromatic number \(\chi(G)\) is the minimum number of colors used in a
 proper vertex coloring of G. Normal colors: \(1, 2, 3, 4, 5, 6, \dots\)
 
 Greedy algorithm for coloring.  Take an uncolored vertex, assign to it the
-smallest color not used by any of its already colored neighbours.
+smallest color not used by any of its already colored neighbors.
 
 Corollary. \(\chi(G) \leq \Delta + 1\)
 
-Exercice. Equality holds for add-cycles and complete graphs.
+Exercice. Equality holds for odd-cycles and complete graphs.
 
 Brooks theorem. If \(G\) is a graph not ismorphic to an odd-cycle or to a
 complex graph, then \(\chi(G) \leq \Delta\).
@@ -178,7 +180,7 @@ Proof (by Lovasz).
 \begin{enumerate}
 \item We may assume \(\Delta \geq 3\). Towards a proof by induction:
 \item \(G\) has no vertex cut or, more generally, no clique-cut.
-\item \(G\) is 3-vertex-connected.
+\item \(G\) is \(3\)-vertex-connected.
 \item Considerer a vertex \(v\) of degree \(\Delta\) (\(\Delta \geq 3\)) there
 must exists two neighbours \(u, w\) of \(v\) which are not adjacent (why?).
 \item \(G \setminus \{u, v\}\) is connected.
@@ -228,8 +230,8 @@ stronger claim by induction.
 
 Assume: \begin{enumerate}
 \item \(d(v) \leq k\) (induction on \(k\)),
-\item for \(u ~ v, d(u) \leq k\),
-\item for at most one \(u ~ v, d(u) = k\),
+\item for \(u \sim v, d(u) \leq k\),
+\item for at most one \(u \sim v, d(u) = k\),
 \item \(G \setminus v\) is \(k\)-edge-colorable,
 \end{enumerate} then \(G\) is \(k\)-edge-colorable.
 
@@ -346,7 +348,7 @@ Note: It is enough to consider cubic instances.
 \end{proof}
 
 Remarks.  Line graph of \(G\): \(L(G)\), vertices: edges of \(G\), edges: \(e_i
-~ e_j\) iff they have a common vertex.
+\sim e_j\) iff they have a common vertex.
 
 Observation.  Except for \(K_3\), \(w(L(G)) = \Delta(G)\), where \(w\) is the
 clique number and \(G\) is a simple graph.
@@ -363,9 +365,9 @@ Question. Given a graph \(H\) is there a graph \(G\) such that \(H \cong L(G)\)?
 \end{theorem}
 
 \begin{theorem}
-  Strenghtening of the Vizing theorem (Keirstead): If \(G\) is a graph with no
+  Strengthening of the Vizing theorem (Keirstead): If \(G\) is a graph with no
   induced \(K_{1,3}\) or \(K_5\), then
-  \(\chi(G) \in \left\{w(G) \middle| w(G) + 1\right\}\). Note that \(w(G)\) is
+  \(\chi(G) \in \left\{w(G) \middle| w(G) + 1\right\}\).  Note that \(w(G)\) is
   computable in polynomial time for this class of graphs: each \(K_4\) extends
   in a unique way to a maximal clique.
 \end{theorem}
@@ -373,7 +375,7 @@ Question. Given a graph \(H\) is there a graph \(G\) such that \(H \cong L(G)\)?
 \subsection{Graph homomorphisms}
 
 \begin{definition}
-  Homomorphism. Generally: a mapping of ground set to a ground set which
+  Homomorphism.  Generally: a mapping from ground set to a ground set which
   preserves main structures.
 \end{definition}
 
@@ -456,7 +458,7 @@ Condition: \(\sum_{x \in \mathcal{I}} \varphi(I) \geq 1\) for every vertex \(x
 Optimization: \(\min_{\varphi} \sum_{I \in \mathcal{I}} \varphi(I)\).  We
 minimize the number of color classes.
 
-Linera program.
+Linear program.
 
 \subsubsection{Fractional chromatic number \(\chi_f(G)\)}
 \(\mathcal{I}\) is the set of all independent sets.
