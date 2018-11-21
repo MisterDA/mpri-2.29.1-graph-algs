@@ -366,8 +366,8 @@ Question. Given a graph \(H\) is there a graph \(G\) such that \(H \cong L(G)\)?
 
 \begin{theorem}
   Strengthening of the Vizing theorem (Keirstead): If \(G\) is a graph with no
-  induced \(K_{1,3}\) or \(K_5\), then
-  \(\chi(G) \in \left\{w(G) \middle| w(G) + 1\right\}\).  Note that \(w(G)\) is
+  induced \(K_{3,3}\) or \(K_5\), then
+  \(\chi(G) \in \left\{w(G) \,\middle|\, w(G) + 1\right\}\).  Note that \(w(G)\) is
   computable in polynomial time for this class of graphs: each \(K_4\) extends
   in a unique way to a maximal clique.
 \end{theorem}
@@ -388,7 +388,7 @@ Examples:
 \end{itemize}
 
 Homework. \(G \to K_k\) (the complete graph on \(k\) vertices) iff \(\chi(G)
-\leq k\). \(\chi(G) = \min\left\{|V(H)| \middle| G \to H\right\}\).
+\leq k\). \(\chi(G) = \min\left\{|V(H)| \,\middle|\, G \to H\right\}\).
 
 \begin{definition}
   Core of a graph \(G\) is \enquote{the} smallest subgraph \(H\) such that \(G
@@ -553,7 +553,7 @@ Observation: \(\tau(G) \geq \nu(G)\).
   If \(\nu(G)=0\) (i.e. \(G\) has no edges) then \(\tau(G)=0\) and done.
   Suppose \(\nu(G) = \tau(G)\) whenever \(G\) is bipartite and \(\nu(G) \leq k -
   1\).  Suppose \(G\) is bipartite and \(\nu(G) = k\).  Let \(u\) be a vertex
-  which belongs to any maximum matching.  Thus, \(\nu(G\setminus u = k - 1)\).
+  which belongs to any maximum matching.  Thus, \(\nu(G\setminus u) = k - 1\).
   By induction, \(G\setminus u\) has a vertex cover \(C\) of size \(k - 1\).
   Then \(C \cup \{u\}\) is a vertex cover of size \(k\).  Thus \(\tau(G) \leq
   \nu(G)\) for bipartite graphs.  However \(\tau(G) \geq \nu(G)\) holds for all
@@ -562,7 +562,7 @@ Observation: \(\tau(G) \geq \nu(G)\).
 
 Corollary: every \(k\)-regular bipartite graph has a perfect matching.
 \begin{proof}
-  Singe \(G\) is regular, the tow parts have a same number of vertices, say
+  Singe \(G\) is regular, the two parts have a same number of vertices, say
   \(n\) (i.e. \(|\nu(G)|=2n\)).  Thus \(G\) has exactly \(kn\) edges.  Let \(C\)
   be a vertex cover of size \(\tau(G)\).  Each vertex covers exactly \(k\)
   edges, thus \(\tau(G)\) vertices covers at most \(k \tau(G)\) edges.  Thus,
@@ -574,6 +574,122 @@ Corollary: every \(k\)-regular bipartite graph has an edge-chromatic number of
 exactly \(k\).
 
 Corollary: for every bipartite graph, \(\chi'(G) = \Delta(G)\).
+
+Other min-max theorems:
+
+\begin{theorem}
+  Menger.  Let \(G\) be a (connected) graph.  Let \(u\) and \(v\) be two
+  vertices, then the maximum number of internally vertex disjoints paths
+  connecting \(u\) to \(v\) is the same as the minimum number of vertices of an
+  \(s\)-\(t\)-cut (a cut which separates \(s\) and \(t\)).
+\end{theorem}
+
+Note: theorem is still valid if \(s\) and \(t\) are replaced by sets of vertices
+\(S\) and \(T\).
+
+\begin{theorem}
+  Menger's, directed version.
+  \begin{itemize}
+  \item \(D\) is a digraph, \(S\) and \(T\) subsets of vertices.
+  \item \(S\)-\(T\) path: a directed path which starts at a vertex in \(S\) and
+    ends at a vertex of \(T\).
+  \item \(S\)-\(T\) cut: a set \(X\) of vertices where every \(S\)-\(T\) path
+    must use at least one vertex of \(X\).
+  \end{itemize}
+\end{theorem}
+
+The claim: maximum number of internally disjoints \(S\)-\(T\) paths is equal to
+the minumum number of vertices in a \(S\)-\(T\) cut.
+
+Algorithmic comment.  Given a digraph \(D\) and vertices \(s\) and \(t\), a
+minimum \(s\)-\(t\) cut and a maximum number of internally disjoint \(s\)-\(t\)
+paths can be found in \(O(n m)\) steps.
+
+Algorithms for finding a maximumm matching in a bipartite graph.  A main idea:
+\(M\)-augmenting path.  Let \(G\) be a graph, \(M\) a matching.  Question: is
+\(M\) a maximum matching?
+
+\(M\)-augmenting path.  Change \(M\) to \(M' \oplus P\) (replace blue edges of
+\(P\) with red edges of \(P\)).
+
+Thus, if \(M\) is a maximum matching, then there is no \(M\)-augmenting path.
+On the other hand, if \(M'\) is matching with more edges than \(M\), then
+\(M' \cup M\) is the union of even cycles and paths, one of which is necessarily
+an \(M\)-augmenting path.
+
+Conclusion.  A matching \(M\) of graph \(G\) is a maximum matching if and only
+if there is no \(M\)-augmenting path.
+
+Algorithm.  Input: a bipartite graph \(G\) and a matching \(M\).  Output: an
+\(M\)-augmenting path \(P\) or certify that there is none.
+
+Remark.  \(Y_M\)-\(X_M\) path can be found in \(O(m)\) time.  Starting with
+\(M=\emptyset\), one may reach a maximum size matching in at most \(O(n m)\)
+times.
+
+Second algorithm.  Maximum matching.  Corresponds to maximum number of
+\(x\)-\(y\) paths.
+
+Remark.  Maximum number of \(x\)-\(y\) paths can be determined in \(O(\sqrt{n}
+m)\) times.
+
+Let \(G\) be a bipartite graph on parts \(A\) and \(B\).  Question: is there a
+matching \(M\) which covers all vertices of \(A\)?
+
+Obvious necessary condition (Hall condition):
+\[\forall S \subseteq A: |N(S)| \geq |S|\]
+
+\begin{theorem}
+  Marriage Hall.  If the condition is satisfied, then \(G\) has an
+  \(A\)-saturation matching.
+\end{theorem}
+
+\begin{proof}
+  By induction on the size of \(A\).  If \(|A| = 0\), then nothing to prove.
+  Assume XX \(|A| \leq k -1\), then the theorem is true, and consider case \(|A|
+  = k\).
+
+  Case 1. Suppose for every \(S \subsetneq A\), we have \(N(S) \geq |S|+1\).
+  Take a vertex \(v \in A\) and match it to a neighbor \(u\) of it.  Remove
+  \(v\) and \(u\) and apply induction.
+
+  Case 2. For some \(S \subsetneq A\) we have \(|N(S)| = |S|\).  First apply
+  induction on subgraph induced by \(S\) and \(|N(S)\).  Then remove \(S\) and
+  \(N(S)\) from \(G\) and apply induction on the resulting graph.
+
+  Strengthening: \(G\) bipartite graph on \(A\) and \(B\).  For \(S \subseteq
+  A\) define \(\delta(S) = \max\{0, |S| - |N(S)|\}\).  Define \(\mu(G) = \max_{S
+    \subseteq A}\{\delta(S)\}\).  The largest matching of \(G\) covers \(|A| -
+  \mu(G)\) vertices of \(A\).
+
+  System of distinct representatives. \[A_1, \dots, A_k \subseteq
+    \mathcal{U}.\] There exists distinct vertices \(x_1 \in A_1, \dots, x_k \in
+  A_k\) iff for every \(S \subseteq [1, k]\) we have \[\left| \bigcup_{i \in
+        S} A_i \right|
+    \geq |S|.\]
+\end{proof}
+
+Maximum matching in general graph.  Question 1.  Does \(G\) admit a perfect
+matching?
+
+\begin{definition}
+  \(O(S)\): number of components of \(G \setminus S\) with an odd number of
+  vertices.
+\end{definition}
+
+Observation.  If \(G\) has a perfect matching, then \(O(S) \leq |S|\) for every
+\(S \subseteq \nu(G)\).
+
+\begin{theorem}
+  Tutte.  A graph \(G\) admits a perfect matching iff \(O(S) \leq |S|\) for
+  every \(S \subseteq \nu(G)\).
+\end{theorem}
+
+Remark.  Similarly, \(\max\{O(S) - |S|, 0\}\) determines the size of the largest
+matching of \(G\).
+
+Project.  Look for algorithms with better running time for regular bipartite
+graphs.
 
 \section{Introduction to Minors, TreeWidth and FPT algorithms}
 \section{Spectral graph theory}
