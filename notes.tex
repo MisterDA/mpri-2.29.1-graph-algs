@@ -16,7 +16,8 @@
 \usepackage{algorithm2e}
 % \usepackage{minted}
 % \usepackage[type={CC}, modifier={by-sa}, version={4.0}]{doclicense}
-\usepackage{lipsum}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,positioning}
 
 \title{MPRI Graph Algorithms Lecture Notes}
 \author{Antonin Décimo}
@@ -33,9 +34,23 @@
 
 \section{Basic notions of graph theory}
 
+\subsection{Notation and terminology}
+
+A (multi)-graph is composed of a vertex set, and an edge (multi)-set, which is a
+\(2\) element subset of the vertex set.  It is denoted by \(G = (V(G), E(G))\),
+and can be seen as a binary symmetric relation.  A digraph is any binary
+relation.
+
+A graph composed of \(n\) vertices is stored as a \(n \times n\) adjacency
+boolean matrix, where
+\[a_{i, j} = \begin{cases}
+    0 & \text{if } v_i \not~ v_j\\
+    1 & \text{if } v_i ~ v_j
+  \end{cases}\]
+
 \subsection{The four-color theorem}
 The four-color theorem. (First proposed by Francis Guthrie in October 1852).
-Region of every simple map can be colored properly using at most four colors.
+Regions of every simple map can be properly colored using at most four colors.
 
 \begin{enumerate}
 \item Every planar graph (with no loop) can be properly vertex colored using at
@@ -56,8 +71,41 @@ The key idea: 4 colors are elements of \(\Z_2 \times \Z_2\), they are
 \enquote{proper}) elements \((0, 1), (1, 0), (1, 1)\).
 
 \begin{proof}
-  We may assume \(G\) is a planar graph where every face is a triangle
+  We may assume that \(G\) is a planar graph where every face is a triangle
   (triangulation).
+
+  \begin{center}
+    \begin{tikzpicture}
+      \node[draw, thick, minimum size=4cm, regular polygon,
+        regular polygon sides=5] (polygon) {};
+      \foreach \i in {1, ..., 5} \draw (polygon.center) -- (polygon.corner \i);
+      \draw (polygon.corner 1) to [bend right=90, looseness=1.8]
+        (polygon.corner 3);
+      \draw (polygon.corner 3) to [bend right=90, looseness=1.8]
+        (polygon.corner 5);
+    \end{tikzpicture}
+    \begin{tikzpicture}
+      \node[draw, thick, minimum size=4cm, regular polygon,
+        regular polygon sides=5] (outer) {};
+      \node[draw, dashed, minimum size=2cm, regular polygon,
+        regular polygon sides=5, rotate = 180] (inner) {};
+      \foreach \i in {1, ..., 5} \draw (outer.center) -- (outer.corner \i);
+      \draw (outer.corner 1) to [bend right=90, looseness=1.8]
+        (outer.corner 3);
+      \draw (outer.corner 3) to [bend right=90, looseness=1.8]
+        (outer.corner 5);
+      \node[above left=0.05cm and 0.3cm of outer.side 1] (a) {};
+      \node[below right=0.2cm and 0.2cm of outer.side 4] (b) {};
+      \node[above right=of outer.side 5] (c) {};
+      \draw [dashed] (a.center) to [bend left=20] (c.center) to [bend left=20]
+        (b.center);
+      \draw [dashed] (inner.corner 3) to (c);
+      \draw [dashed] (inner.corner 1) to [bend right=90, looseness=1.8] (b.center)
+        to (inner.corner 2);
+      \draw [dashed] (inner.corner 4) to (a.center) to [bend right=90,
+        looseness=1.8] (inner.corner 5);
+    \end{tikzpicture}
+  \end{center}
 \end{proof}
 
 Some of the main theories developed by the four-color theorem, Tait's
@@ -103,6 +151,14 @@ graph is 3-edge-colorable.
 Project. Prove that every 2-connected graph admits a nowhere zero 6-flow.
 
 \subsection{Proper coloring}
+
+\begin{tikzpicture}
+  \node[draw, thick] (a) {\textcolor{red}{1}};
+  \node[draw, thick, below=of a] (b) {\textcolor{red}{1}};
+  \node[draw, thick, right=of a] (c) {\textcolor{green}{2}};
+  \node[draw, thick, below=of c] (d) {\textcolor{green}{2}};
+  \draw (b) to (c) to (a) to (d);
+\end{tikzpicture}
 
 The chromatic number \(\chi(G)\) is the minimum number of colors used in a
 proper vertex coloring of G. Normal colors: \(1, 2, 3, 4, 5, 6, \dots\)
@@ -326,7 +382,7 @@ Examples:
 \item Groups. \(h: (E, +) \to (F, *)\), \(h: E \to F\) such that
   \(h(x + y) = h(x) * h(y)\) for every pair \(x, y \in E\).
 \item Graphs. \(h: G \to H\), \(h: V(G) \to V(H)\) such that \(xy \in E(G)
-  \Leftarrow h(x)h(y) \in E(H)\).
+  \Rightarrow h(x)h(y) \in E(H)\).
 \end{itemize}
 
 Homework. \(G \to K_k\) (the complete graph on \(k\) vertices) iff \(\chi(G)
@@ -389,6 +445,28 @@ Thus the \enquote{Independence-number} problem on the class of all graphs is the
 the \enquote{Clique-number} problem.
 
 \subsection{Chromatic number as an Integer program}
+
+Let \(\mathcal{I}\) be the set of all (maximal) independent sets of \(G\).
+\(\varphi: \mathcal{I} \to \{0, 1\}\). \(1\) means that \(I\) is a color class,
+\(0\) that \(I\) is not a color class.
+
+Condition: \(\sum_{x \in \mathcal{I}} \varphi(I) \geq 1\) for every vertex \(x
+\in V\).  Vertex \(v\) is colored.
+
+Optimization: \(\min_{\varphi} \sum_{I \in \mathcal{I}} \varphi(I)\).  We
+minimize the number of color classes.
+
+Linera program.
+
+\subsubsection{Fractional chromatic number \(\chi_f(G)\)}
+\(\mathcal{I}\) is the set of all independent sets.
+\(\varphi: \mathcal{I} \to [0, 1]\) (all real numbers \(0 \leq x \leq 1\)).
+
+Condition: \[\sum_{x \in I} \varphi(I) \geq 1\]
+\[\chi_{\_}(G) = \min_\varphi \sum_{I \in \mathcal{I}} \varphi(I)\]
+
+Corollary. \[\chi_f(G) \leq \chi(G)\]
+\[\chi_f(G) \geq \frac{|V(G)|}{\alpha(G)}\]
 
 \section{Introduction to Minors, TreeWidth and FPT algorithms}
 \section{Spectral graph theory}
