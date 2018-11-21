@@ -17,7 +17,7 @@
 % \usepackage{minted}
 % \usepackage[type={CC}, modifier={by-sa}, version={4.0}]{doclicense}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric,positioning}
+\usetikzlibrary{shapes.geometric,positioning,chains,fit,shapes,calc}
 
 \title{MPRI Graph Algorithms Lecture Notes}
 \author{Antonin Décimo}
@@ -119,11 +119,17 @@ Planarity:
 \item crossing number, genus, …
 \end{itemize}
 
+\begin{tikzpicture}
+  \draw (-1,0) to[bend left] (1,0);
+  \draw (-1.2,.1) to[bend right] (1.2,.1);
+  \draw[rotate=0] (0,0) ellipse (100pt and 50pt);
+\end{tikzpicture}
+
 Coloring:
 \begin{itemize}
 \item chromatic number
 \item homomorphism
-\item circular, fractional, acyclic, … chromatic number
+\item \{circular, fractional, acyclic, …\} chromatic number
 \item List coloring
 \item independence and clique number
 \end{itemize}
@@ -170,9 +176,9 @@ smallest color not used by any of its already colored neighbors.
 
 Corollary. \(\chi(G) \leq \Delta + 1\)
 
-Exercice. Equality holds for odd-cycles and complete graphs.
+Exercise. Equality holds for odd-cycles and complete graphs.
 
-Brooks theorem. If \(G\) is a graph not ismorphic to an odd-cycle or to a
+Brooks theorem. If \(G\) is a graph not isomorphic to an odd-cycle or to a
 complex graph, then \(\chi(G) \leq \Delta\).
 
 Proof (by Lovasz).
@@ -181,24 +187,46 @@ Proof (by Lovasz).
 \item We may assume \(\Delta \geq 3\). Towards a proof by induction:
 \item \(G\) has no vertex cut or, more generally, no clique-cut.
 \item \(G\) is \(3\)-vertex-connected.
-\item Considerer a vertex \(v\) of degree \(\Delta\) (\(\Delta \geq 3\)) there
-must exists two neighbours \(u, w\) of \(v\) which are not adjacent (why?).
+\item Consider a vertex \(v\) of degree \(\Delta\) (\(\Delta \geq 3\)) there
+must exists two neighbors \(u, w\) of \(v\) which are not adjacent (why?).
 \item \(G \setminus \{u, v\}\) is connected.
 \item Order vertices such that \(v_i=u, v_2=w, \dots, v_n=v\) and that for \(i=3
-\dots n-1\), vertex \(v_i\) has a neighbour in \(\{v_{i+1}, \dots, v_n\}\).
-\item Apply greedy algorith on \(v_1, \dots, v_n\).
+\dots n-1\), vertex \(v_i\) has a neighbor in \(\{v_{i+1}, \dots, v_n\}\).
+\item Apply greedy algorithm on \(v_1, \dots, v_n\).
 \end{enumerate}
 
 Remark on algorithmic application. It can be checked (easily) if \(G\) is
 3-connected, then we can use the proof to find a \(\Delta\)-coloring.
 
-Remark. When we are lucky (which means whe have one of the good orderings),
+Remark. When we are lucky (which means we have one of the good orderings),
 greedy algorithm may produce a coloring using \(\chi(G)\)-colors.
 
 However normally the number of colors used by a greedy coloring is much larger
 than \(\chi(G)\).
 
-Bipartite and at least one edge iff \(\chi(G)=2\).
+Bipartite and at least one edge if and only if \(\chi(G)=2\).
+
+\begin{center}
+  \begin{tikzpicture}[thick, draw]
+    \node[] (v1) {1};
+    \node[right=of v1] (v2) {2};
+    \node[right=of v2] (v3) {3};
+    \node[right=of v3] (v4) {4};
+
+    \node[below=of v1] (v5) {2};
+    \node[below=of v2] (v6) {1};
+    \node[below=of v3] (v7) {3};
+    \node[below=of v4] (v8) {4};
+
+    \node[draw, ellipse, fit=(v1) (v4)] {};
+    \node[draw, ellipse, fit=(v5) (v8)] {};
+
+    \draw (v1) -- (v5) -- (v3) -- (v6) -- (v2) -- (v7) -- (v1) -- (v8) -- (v2);
+    \draw (v6) -- (v4) -- (v7);
+    \draw (v4) -- (v5);
+    \draw (v3) -- (v8);
+  \end{tikzpicture}
+\end{center}
 
 Homework. Find ordering of vertices for interval graphs, for chordal graphs, …
 
@@ -214,7 +242,27 @@ algorithm of order \(O\left({\left(\frac{1+\sqrt{5}}{2}\right)}^{n+m}\right)\).
 different colors.
 
 edge-chromatic number: minimum number of colors in an edge-coloring. Denoted
-\(\chi'(G)\). Observation: \(\chi'(G) \geq \Delta\).
+\(\chi'(G)\).
+
+Observation: \(\chi'(G) \geq \Delta\).
+
+\begin{center}
+  \begin{tikzpicture}
+    \node[draw, dashed, minimum size=2cm, regular polygon,
+      regular polygon sides=6] (polygon) {};
+    \draw[thick] (polygon.corner 1) -- (polygon.corner 2);
+    \draw[thick] (polygon.corner 3) -- (polygon.corner 4);
+    \draw[thick] (polygon.corner 5) -- (polygon.corner 6);
+  \end{tikzpicture}
+  \begin{tikzpicture}
+    \node[draw, dotted, minimum size=2cm, regular polygon,
+      regular polygon sides=5] (polygon) {};
+    \draw[thick] (polygon.corner 1) -- (polygon.corner 2);
+    \draw[dashed] (polygon.corner 2) -- (polygon.corner 3);
+    \draw[thick] (polygon.corner 4) -- (polygon.corner 5);
+    \draw[dashed] (polygon.corner 5) -- (polygon.corner 6);
+  \end{tikzpicture}
+\end{center}
 
 Exercise:
 \(\chi'(C_{2k})=2, \chi'(C_{2k+1})=3, \chi'(K_{2n})=2n-1, \chi'(K_{2n+1})=2n+1\).
@@ -222,10 +270,47 @@ Exercise:
 Theorem (Vizing) \(\chi'(G) \leq \Delta + 1\)
 
 Key idea: consider a partial coloring and let \(P\) be a maximal 2-edge-colored
-path (or an even cycle). If we switch the colors on edges of \(P\), the we still
-have a partial coloring.
+path (or an even cycle). If we switch the colors on the edges of \(P\), then we
+still have a partial coloring.
 
-A proof of Vizing theorem (by Ehrenfecht, Fabor, Kierstead).  We aim a proving a
+\begin{center}
+  \begin{tikzpicture}
+    \node[draw, circle] (v1) {}; \node[draw, circle, right=of v1] (v2) {};
+    \node[draw, circle, right=of v2] (v3) {}; \node[draw, circle, right=of v3]
+    (v4) {}; \node[draw, circle, right=of v4] (v5) {}; \node[draw, circle,
+    right=of v5] (v6) {};
+
+    \draw[thick,red] (v1) -- (v2); \draw[thick,green] (v2) -- (v3);
+    \draw[thick,red] (v3) -- (v4); \draw[thick,green] (v4) -- (v5);
+    \draw[thick,red] (v5) -- (v6);
+
+    \node[draw, circle, below=of v1] (u1) {}; \node[draw, circle, right=of u1]
+    (u2) {}; \node[draw, circle, right=of u2] (u3) {}; \node[draw, circle,
+    right=of u3] (u4) {}; \node[draw, circle, right=of u4] (u5) {}; \node[draw,
+    circle, right=of u5] (u6) {}; \node[circle, right=of u6] (u7) {};
+
+    \draw[thick,green] (u1) -- (u2); \draw[thick,red] (u2) -- (u3);
+    \draw[thick,green] (u3) -- (u4); \draw[thick,red] (u4) -- (u5);
+    \draw[thick,green] (u5) -- (u6); \draw[thick,red] (u6) -- (u7);
+  \end{tikzpicture}
+\end{center}
+
+\begin{center}
+  \begin{tikzpicture}
+    \node[draw, thick, minimum size=2cm, regular polygon, regular polygon
+      sides=3] (polygon) {};
+  \end{tikzpicture}
+  \begin{tikzpicture}
+    \node[draw, thick, minimum size=2cm, regular polygon, regular polygon
+      sides=4] (polygon) {};
+  \end{tikzpicture}
+  \begin{tikzpicture}
+    \node[draw, thick, minimum size=2cm, regular polygon, regular polygon
+      sides=5] (polygon) {};
+  \end{tikzpicture}
+\end{center}
+
+A proof of Vizing theorem (by Ehrenfecht, Fabor, Kierstead).  We aim to prove a
 stronger claim by induction.
 
 Assume: \begin{enumerate}
@@ -235,11 +320,11 @@ Assume: \begin{enumerate}
 \item \(G \setminus v\) is \(k\)-edge-colorable,
 \end{enumerate} then \(G\) is \(k\)-edge-colorable.
 
-Step 1. By adding pendant vertices, if needed we may assume \(d(u_1) = k, d(u_2)
-= d(u_3) =\cdots = k - 1\).
+Step 1. By adding pendant vertices, if needed we may assume
+\(d(u_1) = k, d(u_2) = d(u_3) =\cdots = k - 1\).
 
 We consider a \(k\)-edge-coloring of \(G \setminus v\) and define
-\[\chi_i = {\text{neighbours of } v \text{ which miss color } i}.\]
+\[\chi_i = {\text{neighbors of } v \text{ which miss color } i}.\]
 
 Among all \(k\)-edge-colorings of \(G\setminus v\) we chose one such that
 \(\sum{|x_i|}^2\) is minimized.
@@ -296,7 +381,7 @@ In our study to prove that a problem \(P\) is NP-hard, we show a many-to-one
 reduction from a problem already known to be NP-hard to our problem \(P\).
 
 Problem: \(3\)-edge-coloring (sub)-cubic graph (\(3\)-ECCG).
-Input: a subcubic graph \(G\).
+Input: a sub-cubic graph \(G\).
 Output: Yes --- if \(G\) is \(3\)-edge-colorable, No if \(G\) is not
 \(3\)-edge-colorable.
 
@@ -314,10 +399,10 @@ Note: It is enough to consider cubic instances.
   \(G_L\) such that:
 
   \begin{enumerate}
-  \item \(G_L\) is subcubic;
+  \item \(G_L\) is sub-cubic;
   \item Order of \(G_L\) is polynomial in size of \(L\) (number of variables and
     clauses of \(L\));
-  \item \(L\) is a YES instance of \(3\)-SAT iff \(G_L\) is
+  \item \(L\) is a YES instance of \(3\)-SAT if and only if \(G_L\) is
     \(3\)-edge-colorable.
   \end{enumerate}
 
@@ -333,7 +418,7 @@ Note: It is enough to consider cubic instances.
 
 
   Main property of variable gadgets: in every \(3\)-edge-coloring either each
-  paris of pendant edges receive the same color (\(x_i \to \top\)) or none of
+  pairs of pendant edges receive the same color (\(x_i \to \top\)) or none of
   them (\(x_j \to \bot\)).  Moreover, any choice of coloring of pendant edge
   using at most \(3\) colors satisfying this condition can extend to \(3\)-edge
   coloring of the whole graph.
@@ -343,12 +428,12 @@ Note: It is enough to consider cubic instances.
   \(x_j \to \bot\): when all pairs are \(2\)-colored.
 
   To complete our proof we must build a clause gadget of the form where a
-  \(3\)-edge-coloring is possible iff at least one pairs of pendant edges is
-  monochromatic. This is the case in:
+  \(3\)-edge-coloring is possible if and only if at least one pairs of pendant
+  edges is monochromatic. This is the case in:
 \end{proof}
 
 Remarks.  Line graph of \(G\): \(L(G)\), vertices: edges of \(G\), edges: \(e_i
-\sim e_j\) iff they have a common vertex.
+\sim e_j\) if and only if they have a common vertex.
 
 Observation.  Except for \(K_3\), \(w(L(G)) = \Delta(G)\), where \(w\) is the
 clique number and \(G\) is a simple graph.
@@ -359,17 +444,16 @@ Corollary of Vizing's theorem: for every line graph we have \(w(L(G)) \leq
 Question. Given a graph \(H\) is there a graph \(G\) such that \(H \cong L(G)\)?
 
 \begin{theorem}
-  Beineke theorem.
-  \(H \cong L(G)\) (where \(G\) is a simple graph) iff it contains none of the
-  following graphs as induced subgraphs.
+  Beineke theorem.  \(H \cong L(G)\) (where \(G\) is a simple graph) if and only
+  if it contains none of the following graphs as induced sub-graphs.
 \end{theorem}
 
 \begin{theorem}
   Strengthening of the Vizing theorem (Keirstead): If \(G\) is a graph with no
   induced \(K_{3,3}\) or \(K_5\), then
-  \(\chi(G) \in \left\{w(G) \,\middle|\, w(G) + 1\right\}\).  Note that \(w(G)\) is
-  computable in polynomial time for this class of graphs: each \(K_4\) extends
-  in a unique way to a maximal clique.
+  \(\chi(G) \in \left\{w(G) \,\middle|\, w(G) + 1\right\}\).  Note that \(w(G)\)
+  is computable in polynomial time for this class of graphs: each \(K_4\)
+  extends in a unique way to a maximal clique.
 \end{theorem}
 
 \subsection{Graph homomorphisms}
@@ -387,11 +471,12 @@ Examples:
   \Rightarrow h(x)h(y) \in E(H)\).
 \end{itemize}
 
-Homework. \(G \to K_k\) (the complete graph on \(k\) vertices) iff \(\chi(G)
-\leq k\). \(\chi(G) = \min\left\{|V(H)| \,\middle|\, G \to H\right\}\).
+Homework. \(G \to K_k\) (the complete graph on \(k\) vertices) if and only if
+\(\chi(G) \leq k\).
+\(\chi(G) = \min\left\{|V(H)| \,\middle|\, G \to H\right\}\).
 
 \begin{definition}
-  Core of a graph \(G\) is \enquote{the} smallest subgraph \(H\) such that \(G
+  Core of a graph \(G\) is \enquote{the} smallest sub-graph \(H\) such that \(G
   \to H\).
 
   If \(h: G \to H, f: H \to F\) then \(f \circ h: G \to F\).  We need to show
@@ -401,10 +486,10 @@ Homework. \(G \to K_k\) (the complete graph on \(k\) vertices) iff \(\chi(G)
 Graphs: binary symmetric relations.
 Digraphs: binary relations.
 Oriented graphs: binary anti-symmetric relations.
-Edge-colored graphs, hypergraphs.
+Edge-colored graphs, hyper-graphs.
 
 How to present \(3\)-SAT as a homomorphism problem?  Given an instance of
-\(3\)-SAT our taks is to assign \(\top, \bot\) to variables such that each
+\(3\)-SAT our task is to assign \(\top, \bot\) to variables such that each
 clause receives at least one \(\top\) assignment.
 
 Problem: H-Coloring.
@@ -443,8 +528,8 @@ Determining \(\alpha(G)\) is an NP-hard problem.  Best known algorithm so far:
 
 Note: \(\alpha(G) = w(\bar{G})\).
 
-Thus the \enquote{Independence-number} problem on the class of all graphs is the same as
-the \enquote{Clique-number} problem.
+Thus the \enquote{Independence-number} problem on the class of all graphs is the
+same as the \enquote{Clique-number} problem.
 
 \subsection{Chromatic number as an Integer program}
 
@@ -487,9 +572,9 @@ Edges: \(A \sim B \Leftrightarrow A \cap B = \emptyset\)
 Maximum independent set? Chromatic number? Relation to the fractional chromatic
 number.
 
-Project: present a proof of Erdos-Ka-Rado theorem.
+Project: present a proof of Erdős-Ko-Rado theorem.
 
-\subsubsection{Secondaty greedy coloring}
+\subsubsection{Secondary greedy coloring}
 Largest independent set: \(I_1 \to\) color class \(1\).  \(G := G \setminus I_1\).
 Largest independent set: \(I_2 \to\) color class \(1\).  \(G := G \setminus I_2\).
 
@@ -516,8 +601,8 @@ extended notion of signed graphs: \((G, \delta)\), where \(\delta\) is an
 assignment of \(+\) or \(-\) to the edges of \(G\).
 
 Analogue of independence number for edge-coloring.  A matching is a set of edges
-no two of have a common vertex.  \(\nu(G)\) denotes the maximum size of a matching
-in \(G\).  A perfect matching is a matching that covers all vertices.
+no two of have a common vertex.  \(\nu(G)\) denotes the maximum size of a
+matching in \(G\).  A perfect matching is a matching that covers all vertices.
 
 A related parameter: vertex cover.  A set of vertices which intersect every
 edge.  \(\tau(G)\) denotes the minimum size of a vertex cover of \(G\).
@@ -549,15 +634,15 @@ Observation: \(\tau(G) \geq \nu(G)\).
   \end{enumerate}
   In \(M_v\) switch edges of \(P\) and add \(uv\) to get larger matching.
 
-  Now, we'll prove the theorem by induction on \(\nu(G)\).
-  If \(\nu(G)=0\) (i.e. \(G\) has no edges) then \(\tau(G)=0\) and done.
-  Suppose \(\nu(G) = \tau(G)\) whenever \(G\) is bipartite and \(\nu(G) \leq k -
-  1\).  Suppose \(G\) is bipartite and \(\nu(G) = k\).  Let \(u\) be a vertex
-  which belongs to any maximum matching.  Thus, \(\nu(G\setminus u) = k - 1\).
-  By induction, \(G\setminus u\) has a vertex cover \(C\) of size \(k - 1\).
-  Then \(C \cup \{u\}\) is a vertex cover of size \(k\).  Thus \(\tau(G) \leq
-  \nu(G)\) for bipartite graphs.  However \(\tau(G) \geq \nu(G)\) holds for all
-  graphs, thus \(\tau(G) = \nu(G)\) for bipartite graphs.
+  Now, we'll prove the theorem by induction on \(\nu(G)\).  If \(\nu(G)=0\)
+  (i.e. \(G\) has no edges) then \(\tau(G)=0\) and done.  Suppose
+  \(\nu(G) = \tau(G)\) whenever \(G\) is bipartite and \(\nu(G) \leq k - 1\).
+  Suppose \(G\) is bipartite and \(\nu(G) = k\).  Let \(u\) be a vertex which
+  belongs to any maximum matching.  Thus, \(\nu(G\setminus u) = k - 1\).  By
+  induction, \(G\setminus u\) has a vertex cover \(C\) of size \(k - 1\).  Then
+  \(C \cup \{u\}\) is a vertex cover of size \(k\).  Thus
+  \(\tau(G) \leq \nu(G)\) for bipartite graphs.  However \(\tau(G) \geq \nu(G)\)
+  holds for all graphs, thus \(\tau(G) = \nu(G)\) for bipartite graphs.
 \end{proof}
 
 Corollary: every \(k\)-regular bipartite graph has a perfect matching.
@@ -599,13 +684,13 @@ Note: theorem is still valid if \(s\) and \(t\) are replaced by sets of vertices
 \end{theorem}
 
 The claim: maximum number of internally disjoints \(S\)-\(T\) paths is equal to
-the minumum number of vertices in a \(S\)-\(T\) cut.
+the minimum number of vertices in a \(S\)-\(T\) cut.
 
 Algorithmic comment.  Given a digraph \(D\) and vertices \(s\) and \(t\), a
 minimum \(s\)-\(t\) cut and a maximum number of internally disjoint \(s\)-\(t\)
 paths can be found in \(O(n m)\) steps.
 
-Algorithms for finding a maximumm matching in a bipartite graph.  A main idea:
+Algorithms for finding a maximum matching in a bipartite graph.  A main idea:
 \(M\)-augmenting path.  Let \(G\) be a graph, \(M\) a matching.  Question: is
 \(M\) a maximum matching?
 
@@ -646,27 +731,26 @@ Obvious necessary condition (Hall condition):
 
 \begin{proof}
   By induction on the size of \(A\).  If \(|A| = 0\), then nothing to prove.
-  Assume XX \(|A| \leq k -1\), then the theorem is true, and consider case \(|A|
-  = k\).
+  Assume XX \(|A| \leq k -1\), then the theorem is true, and consider case
+  \(|A| = k\).
 
   Case 1. Suppose for every \(S \subsetneq A\), we have \(N(S) \geq |S|+1\).
   Take a vertex \(v \in A\) and match it to a neighbor \(u\) of it.  Remove
   \(v\) and \(u\) and apply induction.
 
   Case 2. For some \(S \subsetneq A\) we have \(|N(S)| = |S|\).  First apply
-  induction on subgraph induced by \(S\) and \(|N(S)\).  Then remove \(S\) and
+  induction on sub-graph induced by \(S\) and \(|N(S)\).  Then remove \(S\) and
   \(N(S)\) from \(G\) and apply induction on the resulting graph.
 
-  Strengthening: \(G\) bipartite graph on \(A\) and \(B\).  For \(S \subseteq
-  A\) define \(\delta(S) = \max\{0, |S| - |N(S)|\}\).  Define \(\mu(G) = \max_{S
-    \subseteq A}\{\delta(S)\}\).  The largest matching of \(G\) covers \(|A| -
-  \mu(G)\) vertices of \(A\).
+  Strengthening: \(G\) bipartite graph on \(A\) and \(B\).  For
+  \(S \subseteq A\) define \(\delta(S) = \max\{0, |S| - |N(S)|\}\).  Define
+  \(\mu(G) = \max_{S \subseteq A}\{\delta(S)\}\).  The largest matching of \(G\)
+  covers \(|A| - \mu(G)\) vertices of \(A\).
 
-  System of distinct representatives. \[A_1, \dots, A_k \subseteq
-    \mathcal{U}.\] There exists distinct vertices \(x_1 \in A_1, \dots, x_k \in
-  A_k\) iff for every \(S \subseteq [1, k]\) we have \[\left| \bigcup_{i \in
-        S} A_i \right|
-    \geq |S|.\]
+  System of distinct representatives. \[A_1, \dots, A_k \subseteq \mathcal{U}.\]
+  There exists distinct vertices \(x_1 \in A_1, \dots, x_k \in A_k\) if and only
+  if for every \(S \subseteq [1, k]\) we have
+  \[\left| \bigcup_{i \in S} A_i \right| \geq |S|.\]
 \end{proof}
 
 Maximum matching in general graph.  Question 1.  Does \(G\) admit a perfect
@@ -681,8 +765,8 @@ Observation.  If \(G\) has a perfect matching, then \(O(S) \leq |S|\) for every
 \(S \subseteq \nu(G)\).
 
 \begin{theorem}
-  Tutte.  A graph \(G\) admits a perfect matching iff \(O(S) \leq |S|\) for
-  every \(S \subseteq \nu(G)\).
+  Tutte.  A graph \(G\) admits a perfect matching if and only if
+  \(O(S) \leq |S|\) for every \(S \subseteq \nu(G)\).
 \end{theorem}
 
 Remark.  Similarly, \(\max\{O(S) - |S|, 0\}\) determines the size of the largest
