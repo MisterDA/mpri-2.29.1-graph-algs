@@ -208,15 +208,15 @@ Bipartite and at least one edge if and only if \(\chi(G)=2\).
 
 \begin{center}
   \begin{tikzpicture}[thick, draw]
-    \node[] (v1) {1};
-    \node[right=of v1] (v2) {2};
-    \node[right=of v2] (v3) {3};
-    \node[right=of v3] (v4) {4};
+    \node[circle] (v1) {1};
+    \node[circle, right=of v1] (v2) {2};
+    \node[circle, right=of v2] (v3) {3};
+    \node[circle, right=of v3] (v4) {4};
 
-    \node[below=of v1] (v5) {2};
-    \node[below=of v2] (v6) {1};
-    \node[below=of v3] (v7) {3};
-    \node[below=of v4] (v8) {4};
+    \node[circle, below=of v1] (v5) {2};
+    \node[circle, below=of v2] (v6) {1};
+    \node[circle, below=of v3] (v7) {3};
+    \node[circle, below=of v4] (v8) {4};
 
     \node[draw, ellipse, fit=(v1) (v4)] {};
     \node[draw, ellipse, fit=(v5) (v8)] {};
@@ -248,19 +248,23 @@ Observation: \(\chi'(G) \geq \Delta\).
 
 \begin{center}
   \begin{tikzpicture}
-    \node[draw, dashed, minimum size=2cm, regular polygon,
-      regular polygon sides=6] (polygon) {};
-    \draw[thick] (polygon.corner 1) -- (polygon.corner 2);
-    \draw[thick] (polygon.corner 3) -- (polygon.corner 4);
-    \draw[thick] (polygon.corner 5) -- (polygon.corner 6);
+    \node[minimum size=2cm, regular polygon, regular polygon sides=6]
+      (polygon) {};
+    \draw[green] (polygon.corner 1) -- (polygon.corner 2);
+    \draw[red, dashed] (polygon.corner 2) -- (polygon.corner 3);
+    \draw[green] (polygon.corner 3) -- (polygon.corner 4);
+    \draw[red, dashed] (polygon.corner 4) -- (polygon.corner 5);
+    \draw[green] (polygon.corner 5) -- (polygon.corner 6);
+    \draw[red, dashed] (polygon.corner 6) -- (polygon.corner 1);
   \end{tikzpicture}
   \begin{tikzpicture}
-    \node[draw, dotted, minimum size=2cm, regular polygon,
-      regular polygon sides=5] (polygon) {};
-    \draw[thick] (polygon.corner 1) -- (polygon.corner 2);
-    \draw[dashed] (polygon.corner 2) -- (polygon.corner 3);
-    \draw[thick] (polygon.corner 4) -- (polygon.corner 5);
-    \draw[dashed] (polygon.corner 5) -- (polygon.corner 6);
+    \node[minimum size=2cm, regular polygon, regular polygon sides=5]
+      (polygon) {};
+    \draw[green] (polygon.corner 1) -- (polygon.corner 2);
+    \draw[red, dashed] (polygon.corner 2) -- (polygon.corner 3);
+    \draw[blue, dotted] (polygon.corner 3) -- (polygon.corner 4);
+    \draw[green] (polygon.corner 4) -- (polygon.corner 5);
+    \draw[red, dashed] (polygon.corner 5) -- (polygon.corner 1);
   \end{tikzpicture}
 \end{center}
 
@@ -297,16 +301,35 @@ still have a partial coloring.
 
 \begin{center}
   \begin{tikzpicture}
-    \node[draw, thick, minimum size=2cm, regular polygon, regular polygon
+    \node[thick, minimum size=2cm, regular polygon, regular polygon
       sides=3] (polygon) {};
+    \draw[red, thick] (polygon.corner 1) -- (polygon.corner 2);
+    \draw[blue, dashed] (polygon.corner 2) -- (polygon.corner 3);
+    \draw[green, dotted] (polygon.corner 3) -- (polygon.corner 1);
   \end{tikzpicture}
   \begin{tikzpicture}
-    \node[draw, thick, minimum size=2cm, regular polygon, regular polygon
-      sides=4] (polygon) {};
+    \node[minimum size=2cm, regular polygon, regular polygon sides=4]
+      (polygon) {};
+    \foreach \i in {1, ..., 4} \draw[blue, dashed] (polygon.center) --
+      (polygon.corner \i);
+    \draw[red, thick] (polygon.corner 1) -- (polygon.corner 2);
+    \draw[red, thick] (polygon.corner 3) -- (polygon.corner 4);
+    \draw[green, dotted] (polygon.corner 2) -- (polygon.corner 3);
+    \draw[green, dotted] (polygon.corner 4) -- (polygon.corner 1);
   \end{tikzpicture}
   \begin{tikzpicture}
     \node[draw, thick, minimum size=2cm, regular polygon, regular polygon
       sides=5] (polygon) {};
+    \draw (polygon.corner 5) -- (polygon.corner 3) -- (polygon.corner 1) --
+      (polygon.corner 4) -- (polygon.corner 2) -- (polygon.corner 5);
+  \end{tikzpicture}
+
+  \begin{tikzpicture}
+    \node[draw, thick, minimum size=3cm, regular polygon, regular polygon
+      sides=5] (polygon) {};
+    \foreach \i in {1, ..., 5} \draw (polygon.center) -- (polygon.corner \i);
+    \draw (polygon.corner 5) -- (polygon.corner 3) -- (polygon.corner 1) --
+      (polygon.corner 4) -- (polygon.corner 2);
   \end{tikzpicture}
 \end{center}
 
@@ -352,6 +375,17 @@ Question: Does this proof translate to a polynomial-time algorithm to find a
 
 A gadget to build cubic \(2\)-connected graphs that are not
 \(3\)-edge-colorable.
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw (0, 0) -- (1, 0) -- (2, 0) -- (3, 0);
+    \draw (1, 0) -- (1, 1) -- (2, 1) -- (2, 0);
+    \draw (1, 1) -- (2, 2);
+    \draw (2, 1) -- (1, 2);
+    \draw (0, 2) -- (1, 2) -- (2, 2) -- (3, 2);
+    \draw[dashed, green] (1.5, 1) to[bend right] (1.75, 0.5);
+  \end{tikzpicture}
+\end{center}
 
 Lemma. In any \(3\)-edge-coloring of this graphs either left parallel edges or
 the right ones receive a same color and the other \(3\) pendant edges receive
@@ -567,7 +601,7 @@ generalization using trees, …
 Vertices: \(k\)-subsets of \(\{1, \dots, n\}\).
 Edges: \(A \sim B \Leftrightarrow A \cap B = \emptyset\)
 
-\[\chi_f(G) = \inf\left\{ \frac{n}{k} |G \to K(n, k)\right\}\]
+\[\chi_f(G) = \inf\left\{ \frac{n}{k} \,\middle|\, G \to K(n, k)\right\}\]
 
 Maximum independent set? Chromatic number? Relation to the fractional chromatic
 number.
