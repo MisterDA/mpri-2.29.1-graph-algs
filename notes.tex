@@ -1,0 +1,296 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setotherlanguage{french}
+\usepackage{csquotes}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fullpage}
+\usepackage[backend=biber, style=numeric, maxbibnames=99]{biblatex}
+%\bibliography{doc.bib}
+\usepackage{hyperxmp}
+\usepackage[colorlinks, citecolor=blue]{hyperref}
+\usepackage{xcolor}
+\usepackage{algorithm2e}
+% \usepackage{minted}
+% \usepackage[type={CC}, modifier={by-sa}, version={4.0}]{doclicense}
+\usepackage{lipsum}
+
+\title{MPRI Graph Algorithms Lecture Notes}
+\author{Antonin Décimo}
+
+
+\def\R{\mathbb{R}}
+\def\Z{\mathbb{R}}
+\def\N{\mathbb{N}}
+\newtheorem{theorem}{Theorem}
+
+\begin{document}
+\maketitle
+
+The four-color theorem. (First proposed by Francis Guthrie in October 1852).
+Region of every simple map can be colored properly using at most four colors.
+
+\begin{enumerate}
+\item Every planar graph (with no loop) can be properly vertex colored using at
+most four colors.
+\item (Reformulation by Peter Guthrie Tait (1880)). Every bridge-less cubic
+  planar graph is 3-edge-colorable.
+\end{enumerate}
+
+Exercise. Prove that \(K_{3,3}\) and \(K_5\) are not planar graphs.  Project:
+study the best known algorithms to decide if a given graph is planar.
+
+\begin{theorem}
+  Statements (1) \& (2) are equivalent.
+\end{theorem}
+
+The key idea: 4 colors are elements of \(\Z_2 \times \Z_2\), they are
+\((0, 0), (0, 1), (1, 0), (1, 1)\).  3 colors are the non-zero (corresponds to
+\enquote{proper}) elements \((0, 1), (1, 0), (1, 1)\).
+
+\begin{proof}
+  We may assume \(G\) is a planar graph where every face is a triangle
+  (triangulation).
+\end{proof}
+
+Some of the main theories developed by the four-color theorem, Tait's
+reformulation. Proof of the equivalence and false statements:
+
+Planarity:
+\begin{itemize}
+\item theory of minor
+\item topological minor
+\item embedding graphs on surfaces
+\item crossing number, genus, …
+\end{itemize}
+
+Coloring:
+\begin{itemize}
+\item chromatic number
+\item homomorphism
+\item circular, fractional, acyclic, … chromatic number
+\item List coloring
+\item independence and clique number
+\end{itemize}
+
+Edge-coloring:
+\begin{itemize}
+\item edge-chromatic number
+\item fractional edge-chromatic number
+\item Hamiltonicity
+\item Matching theory
+\end{itemize}
+
+A cubic graph has an even number of vertices. The proof comes from the theory of
+(nowhere zero) flows.
+
+Exercise. Build a cubic bridgeless graph which is not 3-edge-colorable. Conclude
+that this graph is not hamiltonian.
+
+Project. Build an infinite family of planar cubic bridgeless graphs that are not
+hamiltonians.
+
+Project. Prove that it is NP-complete to decide if a given cubic bridgeless
+graph is 3-edge-colorable.
+
+Project. Prove that every 2-connected graph admits a nowhere zero 6-flow.
+
+Proper coloring.  The chromatic number \(\chi(G)\) is the minimum number of
+colors used in a proper vertex coloring of G. Normal colors: \(1, 2, 3, 4, 5, 6,
+\dots\)
+
+Greedy algorithm for coloring.  Take an uncolored vertex, assign to it the
+smallest color not used by any of its already colored neighbours.
+
+Corollary. \(\chi(G) \leq \Delta + 1\)
+
+Exercice. Equality holds for add-cycles and complete graphs.
+
+Brooks theorem. If \(G\) is a graph not ismorphic to an odd-cycle or to a
+complex graph, then \(\chi(G) \leq \Delta\).
+
+Proof (by Lovasz).
+
+\begin{enumerate}
+\item We may assume \(\Delta \geq 3\). Towards a proof by induction:
+\item \(G\) has no vertex cut or, more generally, no clique-cut.
+\item \(G\) is 3-vertex-connected.
+\item Considerer a vertex \(v\) of degree \(\Delta\) (\(\Delta \geq 3\)) there
+must exists two neighbours \(u, w\) of \(v\) which are not adjacent (why?).
+\item \(G \setminus \{u, v\}\) is connected.
+\item Order vertices such that \(v_i=u, v_2=w, \dots, v_n=v\) and that for \(i=3
+\dots n-1\), vertex \(v_i\) has a neighbour in \(\{v_{i+1}, \dots, v_n\}\).
+\item Apply greedy algorith on \(v_1, \dots, v_n\).
+\end{enumerate}
+
+Remark on algorithmic application. It can be checked (easily) if \(G\) is
+3-connected, then we can use the proof to find a \(\Delta\)-coloring.
+
+Remark. When we are lucky (which means whe have one of the good orderings),
+greedy algorithm may produce a coloring using \(\chi(G)\)-colors.
+
+However normally the number of colors used by a greedy coloring is much larger
+than \(\chi(G)\).
+
+Bipartite and at least one edge iff \(\chi(G)=2\).
+
+Homework. Find ordering of vertices for interval graphs, for chordal graphs, …
+
+Algorithmic discussion.  Simplest algorithm to decide if \(\chi(G) \leq k\) is
+to consider all possible \(k-colorings\), that is \(k^n\) possible
+coloring. Better bounds are provided. \(O(2^n n)\) for any
+\(k\). \(O(1,3289^n)\) for \(k=3\). \(O(1,7272^n)\) for \(k=4\).
+
+Recursive formula \(\chi(G)=\min\{\chi(G+uv), \chi(G-uv)\}\) can be used for an
+algorithm of order \(O\left({\left(\frac{1+\sqrt{5}}{2}\right)}^{n+m}\right)\).
+
+(proper) edge-coloring: coloring of edges such that incident edges receive
+different colors.
+
+edge-chromatic number: minimum number of colors in an edge-coloring. Denoted
+\(\chi'(G)\). Observation: \(\chi'(G) \geq \Delta\).
+
+Exercise:
+\(\chi'(C_{2k})=2, \chi'(C_{2k+1})=3, \chi'(K_{2n})=2n-1, \chi'(K_{2n+1})=2n+1\).
+
+Theorem (Vizing) \(\chi'(G) \leq \Delta + 1\)
+
+Key idea: consider a partial coloring and let \(P\) be a maximal 2-edge-colored
+path (or an even cycle). If we switch the colors on edges of \(P\), the we still
+have a partial coloring.
+
+A proof of Vizing theorem (by Ehrenfecht, Fabor, Kierstead).  We aim a proving a
+stronger claim by induction.
+
+Assume: \begin{enumerate}
+\item \(d(v) \leq k\) (induction on \(k\)),
+\item for \(u ~ v, d(u) \leq k\),
+\item for at most one \(u ~ v, d(u) = k\),
+\item \(G \setminus v\) is \(k\)-edge-colorable,
+\end{enumerate} then \(G\) is \(k\)-edge-colorable.
+
+Step 1. By adding pendant vertices, if needed we may assume \(d(u_1) = k, d(u_2)
+= d(u_3) =\cdots = k - 1\).
+
+We consider a \(k\)-edge-coloring of \(G \setminus v\) and define
+\[\chi_i = {\text{neighbours of } v \text{ which miss color } i}.\]
+
+Among all \(k\)-edge-colorings of \(G\setminus v\) we chose one such that
+\(\sum{|x_i|}^2\) is minimized.
+
+\[\sum_{i=1}^k|\chi_i| = 2d(v)-1\]
+
+Claim. For some \(i, 1 \leq i \leq k\) we have \(|\chi_i| = 1\). Otherwise for
+some \(i\) we have \(|\chi_i| = 0\) and since \(\sum|\chi_i|\) is an odd number,
+for some \(j\) we have \(|\chi_j| \geq 3\). Now consider a maximal
+\({i, j}\)-colored path starting with a vertex in \(\chi_j\) (and not in
+\(\chi_i\)).  Exchanging the colors \(i\) and \(j\) on this path will/may
+increase \(|\chi_i|\) by \(1\) and decrease \(|\chi_j|\) by \(1\), but this
+decreases \(\sum{|\chi_i|}^2\), contradiction.
+
+That means a color say \(i\) is missed exactly in one vertex, say \(u\). Remove
+from \(G\) the edge \(u v\) and all edges of color \(i\). Let \(G'\) be the
+resulting graph. Then \(G'\) and \(v\) satisfy the conditions of our main claim
+for \(k-1\).
+
+Corollary. If the set of vertices of degree \(\Delta(G)\) induces an acyclic
+graph (a forest), then \(\chi'(G) = \Delta(G)\).
+
+Question: Does this proof translate to a polynomial-time algorithm to find a
+\((\Delta + 1)\)-edge-coloring of a give simple graph?
+
+A gadget to build cubic \(2\)-connected graphs that are not
+\(3\)-edge-colorable.
+
+Lemma. In any \(3\)-edge-coloring of this graphs either left parallel edges or
+the right ones receive a same color and the other \(3\) pendant edges receive
+\(3\) distinct colors. Conversely, any such coloring of the \(5\) pendant edges
+can be extended to the whole graph.
+
+NP (non-deterministic polynomial time), NP-completeness, NP-hard.
+
+A problem is in NP if every solution can be verified in polynomial time.
+
+A problem is NP-hard if every problem in NP can be reduced to it in polynomial
+time.
+
+Three different types of reductions are considered.
+\begin{itemize}
+\item Many-to-one (Karp reduction);
+\item Truth-table;
+\item Turing reduction (or Cook-reduction). Cook proved in 1971 that \(3\)-SAT
+  is NP-hard.
+\end{itemize}
+
+NP-complete: an NP-hard problem which is itself in NP.\@
+
+In our study to prove that a problem \(P\) is NP-hard, we show a many-to-one
+reduction from a problem already known to be NP-hard to our problem \(P\).
+
+Problem: \(3\)-edge-coloring (sub)-cubic graph (\(3\)-ECCG).
+Input: a subcubic graph \(G\).
+Output: Yes --- if \(G\) is \(3\)-edge-colorable, No if \(G\) is not
+\(3\)-edge-colorable.
+
+Note: It is enough to consider cubic instances.
+
+\begin{theorem}
+  The problem \(3\)-ECCG is NP-complete.
+\end{theorem}
+
+\begin{proof}
+  Since a coloring can be verified in \(|E(G)|\) steps, the problem is in NP.\@
+
+  To complete the proof we show a polynomial-time reduction from \(3\)-SAT to
+  \(3\)-ECCG.\@ That is given an instance \(L\) of \(3\)-SAT, we build a graph
+  \(G_L\) such that:
+
+  \begin{enumerate}
+  \item \(G_L\) is subcubic;
+  \item Order of \(G_L\) is polynomial in size of \(L\) (number of variables and
+    clauses of \(L\));
+  \item \(L\) is a YES instance of \(3\)-SAT iff \(G_L\) is
+    \(3\)-edge-colorable.
+  \end{enumerate}
+
+  \[L: (x_1 \vee x_2 \vee \bar{x_3}) \wedge (x_1 \vee \bar{x_2} \vee x_5)
+    \wedge \cdots\]
+
+  Variable \(x_i\) appears \(k\) times. Suppose variable \(x_i\) appears \(k\)
+  times (in a positive or negative form).  Associate to \(x_i\) the following
+  \enquote{variable gadgets}.
+
+  Step 1. Form pairs.
+  Step 2. Form a cycle using \(k\) pairs.
+
+
+  Main property of variable gadgets: in every \(3\)-edge-coloring either each
+  paris of pendant edges receive the same color (\(x_i \to \top\)) or none of
+  them (\(x_j \to \bot\)).  Moreover, any choice of coloring of pendant edge
+  using at most \(3\) colors satisfying this condition can extend to \(3\)-edge
+  coloring of the whole graph.
+
+  Variable gadget for \(x_i\) (in \(k\) clauses).
+  \(x_i \to \top\): when all pairs are monochromatic.
+  \(x_j \to \bot\): when all pairs are \(2\)-colored.
+
+  To complete our proof we must build a clause gadget of the form where a
+  \(3\)-edge-coloring is possible iff at least one pairs of pendant edges is
+  monochromatic. This is the case in:
+\end{proof}
+
+Remarks.  Line graph of \(G\): \(L(G)\), vertices: edges of \(G\), edges: \(e_i
+~ e_j\) iff they have a common vertex.
+
+Observation.  Except for \(K_3\), \(w(L(G)) = \Delta(G)\), where \(w\) is the
+clique number and \(G\) is a simple graph.
+
+Corollary of Vizing's theorem: for every line graph we have \(w(L(G)) \leq
+\chi(L(G)) \leq w(L(G)) + 1\).
+
+Question. Given a graph \(H\) is there a graph \(G\) such that \(H \cong L(G)\)?
+
+\end{document}
