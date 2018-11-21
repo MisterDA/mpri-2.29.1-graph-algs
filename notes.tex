@@ -26,10 +26,14 @@
 \def\Z{\mathbb{R}}
 \def\N{\mathbb{N}}
 \newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
 
 \begin{document}
 \maketitle
 
+\section{Basic notions of graph theory}
+
+\subsection{The four-color theorem}
 The four-color theorem. (First proposed by Francis Guthrie in October 1852).
 Region of every simple map can be colored properly using at most four colors.
 
@@ -98,9 +102,10 @@ graph is 3-edge-colorable.
 
 Project. Prove that every 2-connected graph admits a nowhere zero 6-flow.
 
-Proper coloring.  The chromatic number \(\chi(G)\) is the minimum number of
-colors used in a proper vertex coloring of G. Normal colors: \(1, 2, 3, 4, 5, 6,
-\dots\)
+\subsection{Proper coloring}
+
+The chromatic number \(\chi(G)\) is the minimum number of colors used in a
+proper vertex coloring of G. Normal colors: \(1, 2, 3, 4, 5, 6, \dots\)
 
 Greedy algorithm for coloring.  Take an uncolored vertex, assign to it the
 smallest color not used by any of its already colored neighbours.
@@ -210,6 +215,8 @@ the right ones receive a same color and the other \(3\) pendant edges receive
 \(3\) distinct colors. Conversely, any such coloring of the \(5\) pendant edges
 can be extended to the whole graph.
 
+\subsection{NP, NP-hard, NP-completeness}
+
 NP (non-deterministic polynomial time), NP-completeness, NP-hard.
 
 A problem is in NP if every solution can be verified in polynomial time.
@@ -292,5 +299,98 @@ Corollary of Vizing's theorem: for every line graph we have \(w(L(G)) \leq
 \chi(L(G)) \leq w(L(G)) + 1\).
 
 Question. Given a graph \(H\) is there a graph \(G\) such that \(H \cong L(G)\)?
+
+\begin{theorem}
+  Beineke theorem.
+  \(H \cong L(G)\) (where \(G\) is a simple graph) iff it contains none of the
+  following graphs as induced subgraphs.
+\end{theorem}
+
+\begin{theorem}
+  Strenghtening of the Vizing theorem (Keirstead): If \(G\) is a graph with no
+  induced \(K_{1,3}\) or \(K_5\), then
+  \(\chi(G) \in \left\{w(G) \middle| w(G) + 1\right\}\). Note that \(w(G)\) is
+  computable in polynomial time for this class of graphs: each \(K_4\) extends
+  in a unique way to a maximal clique.
+\end{theorem}
+
+\subsection{Graph homomorphisms}
+
+\begin{definition}
+  Homomorphism. Generally: a mapping of ground set to a ground set which
+  preserves main structures.
+\end{definition}
+
+Examples:
+\begin{itemize}
+\item Groups. \(h: (E, +) \to (F, *)\), \(h: E \to F\) such that
+  \(h(x + y) = h(x) * h(y)\) for every pair \(x, y \in E\).
+\item Graphs. \(h: G \to H\), \(h: V(G) \to V(H)\) such that \(xy \in E(G)
+  \Leftarrow h(x)h(y) \in E(H)\).
+\end{itemize}
+
+Homework. \(G \to K_k\) (the complete graph on \(k\) vertices) iff \(\chi(G)
+\leq k\). \(\chi(G) = \min\left\{|V(H)| \middle| G \to H\right\}\).
+
+\begin{definition}
+  Core of a graph \(G\) is \enquote{the} smallest subgraph \(H\) such that \(G
+  \to H\).
+
+  If \(h: G \to H, f: H \to F\) then \(f \circ h: G \to F\).  We need to show
+  that any two minimal images are isomorphic.
+\end{definition}
+
+Graphs: binary symmetric relations.
+Digraphs: binary relations.
+Oriented graphs: binary anti-symmetric relations.
+Edge-colored graphs, hypergraphs.
+
+How to present \(3\)-SAT as a homomorphism problem?  Given an instance of
+\(3\)-SAT our taks is to assign \(\top, \bot\) to variables such that each
+clause receives at least one \(\top\) assignment.
+
+Problem: H-Coloring.
+Input: a graph \(G\).
+Output: YES if \(G \to H\), NO if \(G \not\to H\)
+
+\begin{theorem}
+  Hell \& Nesetril? 1990.  If \(H\) is \(2\)-colorable, then H-Coloring problem
+  is polynomial-time solvable.  If \(\chi(H) \geq 3\), then H-Coloring is an
+  NP-hard problem.
+\end{theorem}
+
+Coloring and homomorphisms of digraphs:
+Input: a digraph \(X\).
+Output: YES if \(X \to D\), NO if \(x \not\to D\).
+
+Challenging question: for which \(D\) is the problem polynomial-time, and for
+which \(D\) is the problem NP-complete?
+
+Conjecture of Feder \& Vardi. Any constraint satisfaction problem is either
+polynomial-time solvable or it is an NP-hard problem.
+
+They proved that it is enough to prove the conjecture for \(D\)-Coloring
+(problem of existence of homomorphism from digraphs to digraph \(D\)).
+
+Vertex-coloring and chromatic umber: to partition vertices into independent
+sets.
+
+Independence number of graph, denoted by \(\alpha(G)\), is the maximum number of
+vertices of \(G\) pairwise non-adjacent.
+
+Corollary. \(\chi(G) \geq \frac{|V(G)|}{\alpha(G)}\).
+
+Determining \(\alpha(G)\) is an NP-hard problem.  Best known algorithm so far:
+\(O(1.2209^n)\).
+
+Note: \(\alpha(G) = w(\bar{G})\).
+
+Thus the \enquote{Independence-number} problem on the class of all graphs is the same as
+the \enquote{Clique-number} problem.
+
+\subsection{Chromatic number as an Integer program}
+
+\section{Introduction to Minors, TreeWidth and FPT algorithms}
+\section{Spectral graph theory}
 
 \end{document}
