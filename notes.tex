@@ -178,22 +178,27 @@ Corollary. \(\chi(G) \leq \Delta + 1\)
 
 Exercise. Equality holds for odd-cycles and complete graphs.
 
-Brooks theorem. If \(G\) is a graph not isomorphic to an odd-cycle or to a
-complex graph, then \(\chi(G) \leq \Delta\).
+\begin{theorem}
+  Brooks.  If \(G\) is a graph not isomorphic to an odd-cycle or to a complex
+  graph, then \(\chi(G) \leq \Delta\).
+\end{theorem}
 
-Proof (by Lovasz).
+\begin{proof}
+  By Lovasz.
 
-\begin{enumerate}
-\item We may assume \(\Delta \geq 3\). Towards a proof by induction:
-\item \(G\) has no vertex cut or, more generally, no clique-cut.
-\item \(G\) is \(3\)-vertex-connected.
-\item Consider a vertex \(v\) of degree \(\Delta\) (\(\Delta \geq 3\)) there
-must exists two neighbors \(u, w\) of \(v\) which are not adjacent (why?).
-\item \(G \setminus \{u, v\}\) is connected.
-\item Order vertices such that \(v_i=u, v_2=w, \dots, v_n=v\) and that for \(i=3
-\dots n-1\), vertex \(v_i\) has a neighbor in \(\{v_{i+1}, \dots, v_n\}\).
-\item Apply greedy algorithm on \(v_1, \dots, v_n\).
-\end{enumerate}
+  \begin{enumerate}
+  \item We may assume \(\Delta \geq 3\). Towards a proof by induction:
+  \item \(G\) has no vertex cut or, more generally, no clique-cut.
+  \item \(G\) is \(3\)-vertex-connected.
+  \item Consider a vertex \(v\) of degree \(\Delta\) (\(\Delta \geq 3\)) there
+    must exist two neighbors \(u, w\) of \(v\) which are not adjacent (why?).
+  \item \(G \setminus \{u, v\}\) is connected.
+  \item Order vertices such that \(v_i=u, v_2=w, \dots, v_n=v\) and that for
+    \(i=3 \dots n-1\), vertex \(v_i\) has a neighbor in
+    \(\{v_{i+1}, \dots, v_n\}\).
+  \item Apply greedy algorithm on \(v_1, \dots, v_n\).
+  \end{enumerate}
+\end{proof}
 
 Remark on algorithmic application. It can be checked (easily) if \(G\) is
 3-connected, then we can use the proof to find a \(\Delta\)-coloring.
@@ -383,7 +388,7 @@ A gadget to build cubic \(2\)-connected graphs that are not
     \draw (1, 1) -- (2, 2);
     \draw (2, 1) -- (1, 2);
     \draw (0, 2) -- (1, 2) -- (2, 2) -- (3, 2);
-    \draw[dashed, green] (1.5, 1) to[bend right] (1.75, 0.5);
+    \draw[dashed, green] (1.5, 1) to[bend right] (1.75, 0.25);
   \end{tikzpicture}
 \end{center}
 
