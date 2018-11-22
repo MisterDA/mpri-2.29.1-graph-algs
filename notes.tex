@@ -11,46 +11,51 @@
 \usepackage[backend=biber, style=numeric, maxbibnames=99]{biblatex}
 %\bibliography{doc.bib}
 \usepackage{hyperxmp}
-\usepackage[colorlinks, citecolor=blue]{hyperref}
+\usepackage[citecolor=blue]{hyperref}
 \usepackage{xcolor}
 \usepackage{algorithm2e}
 % \usepackage{minted}
 % \usepackage[type={CC}, modifier={by-sa}, version={4.0}]{doclicense}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric,positioning,chains,fit,shapes,calc}
+\usepackage{wrapfig}
 
 \title{MPRI Graph Algorithms Lecture Notes}
 \author{Antonin Décimo}
 
 
 \def\R{\mathbb{R}}
-\def\Z{\mathbb{R}}
+\def\Z{\mathbb{Z}}
 \def\N{\mathbb{N}}
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
 
 \begin{document}
 \maketitle
+\tableofcontents
 
 \section{Basic notions of graph theory}
 
 \subsection{Notation and terminology}
 
-A (multi)-graph is composed of a vertex set, and an edge (multi)-set, which is a
-\(2\) element subset of the vertex set.  It is denoted by \(G = (V(G), E(G))\),
-and can be seen as a binary symmetric relation.  A digraph is any binary
-relation.
+\begin{definition}[(Multi)-graph] A (multi)-graph is composed of a vertex set,
+  and an edge (multi)-set, which is a \(2\) element subset of the vertex set.
+  It is denoted by \(G = (V(G), E(G))\), and can be seen as a binary symmetric
+  relation.  A digraph is any binary relation.
+\end{definition}
 
-A graph composed of \(n\) vertices is stored as a \(n \times n\) adjacency
-boolean matrix, where
+In terms of representation, a graph composed of \(n\) vertices is stored as a
+\(n \times n\) adjacency boolean matrix, where:
 \[a_{i, j} = \begin{cases}
     0 & \text{if } v_i \not\sim v_j\\
     1 & \text{if } v_i \sim v_j
   \end{cases}\]
 
-\subsection{The four-color theorem}
-The four-color theorem. (First proposed by Francis Guthrie in October 1852).
-Regions of every simple map can be properly colored using at most four colors.
+\subsection{The four-colors theorem}
+The four-colors theorem was first proposed by Francis Guthrie in October 1852
+but proved only years later.  Its statement is simple.  The regions of every
+simple map can be properly colored using at most four colors.  However, there
+were several formulations over the years:
 
 \begin{enumerate}
 \item Every planar graph (with no loop) can be properly vertex colored using at
@@ -59,22 +64,28 @@ most four colors.
   planar graph is 3-edge-colorable.
 \end{enumerate}
 
-Exercise. Prove that \(K_{3,3}\) and \(K_5\) are not planar graphs.  Project:
-study the best known algorithms to decide if a given graph is planar.
+Exercise. Prove using thoses two formulations that that \(K_{3,3}\) and \(K_5\)
+are not planar graphs.  Project: study the best known algorithms to decide if a
+given graph is planar.
 
+Let's prove that they are indeed equivalent formulations of the same problem.
 \begin{theorem}
   Statements (1) \& (2) are equivalent.
 \end{theorem}
 
-The key idea: 4 colors are elements of \(\Z_2 \times \Z_2\), they are
-\((0, 0), (0, 1), (1, 0), (1, 1)\).  3 colors are the non-zero (corresponds to
-\enquote{proper}) elements \((0, 1), (1, 0), (1, 1)\).
+The key idea is the following: from a graph, construct its dual graph with a
+vertex for each face.  The construction is shown in the
+figure~\ref{fig:graphdual}. The \(4\) colors are elements of
+\(\Z_2 \times \Z_2\), they are \((0, 0), (0, 1), (1, 0), (1, 1)\).  The \(3\)
+colors are the non-zero (corresponds to \enquote{proper}) elements
+\((0, 1), (1, 0), (1, 1)\).
 
 \begin{proof}
   We may assume that \(G\) is a planar graph where every face is a triangle
   (triangulation).
 
-  \begin{center}
+  \begin{figure}[h!]
+    \centering
     \begin{tikzpicture}
       \node[draw, thick, minimum size=4cm, regular polygon,
         regular polygon sides=5] (polygon) {};
@@ -105,27 +116,33 @@ The key idea: 4 colors are elements of \(\Z_2 \times \Z_2\), they are
       \draw [dashed] (inner.corner 4) to (a.center) to [bend right=90,
         looseness=1.8] (inner.corner 5);
     \end{tikzpicture}
-  \end{center}
+    \caption{Constructing the corresponding bridgeless cubic planar graph}\label{fig:graphdual}
+  \end{figure}
 \end{proof}
 
-Some of the main theories developed by the four-color theorem, Tait's
-reformulation. Proof of the equivalence and false statements:
+Many theories were developped to prove the four-colors theorem, among them:
 
-Planarity:
+\begin{wrapfigure}{r}{0.5\textwidth}
+  \begin{center}
+  \begin{tikzpicture}[scale=0.5]
+    \draw (-1,0) to[bend left] (1,0);
+    \draw (-1.2,.1) to[bend right] (1.2,.1);
+    \draw[rotate=0] (0,0) ellipse (100pt and 50pt);
+  \end{tikzpicture}
+  \caption{Embbeding on a torus}
+  \end{center}
+\end{wrapfigure}
+
+\textbf{Planarity}:
 \begin{itemize}
-\item theory of minor
+\item theory of minors
 \item topological minor
 \item embedding graphs on surfaces
 \item crossing number, genus, …
 \end{itemize}
+\vspace{0.3cm}
 
-\begin{tikzpicture}
-  \draw (-1,0) to[bend left] (1,0);
-  \draw (-1.2,.1) to[bend right] (1.2,.1);
-  \draw[rotate=0] (0,0) ellipse (100pt and 50pt);
-\end{tikzpicture}
-
-Coloring:
+\textbf{Coloring}:
 \begin{itemize}
 \item chromatic number
 \item homomorphism
@@ -133,17 +150,19 @@ Coloring:
 \item List coloring
 \item independence and clique number
 \end{itemize}
+\vspace{0.3cm}
 
-Edge-coloring:
+\textbf{Edge-coloring}:
 \begin{itemize}
 \item edge-chromatic number
 \item fractional edge-chromatic number
 \item Hamiltonicity
 \item Matching theory
 \end{itemize}
+\vspace{0.3cm}
 
-A cubic graph has an even number of vertices. The proof comes from the theory of
-(nowhere zero) flows.
+A side result is that a cubic graph has an even number of vertices. The proof
+comes from the theory of (nowhere zero) flows.
 
 Exercise. Build a cubic bridgeless graph which is not 3-edge-colorable. Conclude
 that this graph is not hamiltonian.
@@ -160,10 +179,10 @@ Project. Prove that every 2-connected graph admits a nowhere zero 6-flow.
 
 \begin{center}
   \begin{tikzpicture}
-    \node[draw, thick] (a) {\textcolor{red}{1}};
-    \node[draw, thick, below=of a] (b) {\textcolor{red}{1}};
-    \node[draw, thick, right=of a] (c) {\textcolor{green}{2}};
-    \node[draw, thick, below=of c] (d) {\textcolor{green}{2}};
+    \node[draw, circle, thick] (a) {\textcolor{red}{1}};
+    \node[draw, circle, thick, below=of a] (b) {\textcolor{red}{1}};
+    \node[draw, circle, thick, right=of a] (c) {\textcolor{green}{2}};
+    \node[draw, circle, thick, below=of c] (d) {\textcolor{green}{2}};
     \draw (b) to (c) to (a) to (d);
   \end{tikzpicture}
 \end{center}
