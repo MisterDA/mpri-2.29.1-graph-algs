@@ -19,7 +19,7 @@
 % \usepackage{minted}
 % \usepackage[type={CC}, modifier={by-sa}, version={4.0}]{doclicense}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric,positioning,chains,fit,shapes,calc}
+\usetikzlibrary{shapes.geometric,positioning,graphs,graphs.standard,chains,fit,shapes,calc}
 \usepackage{wrapfig}
 
 \title{MPRI Graph Algorithms Lecture Notes}
@@ -52,6 +52,11 @@ In terms of representation, a graph composed of \(n\) vertices is stored as a
     0 & \text{if } v_i \not\sim v_j\\
     1 & \text{if } v_i \sim v_j
   \end{cases}\]
+
+\paragraph{Graph parameters} (A short list) Vertices \(|V(G)|, n, v, \dots\),
+edges \(|E(G)|, m, e, \dots\), \(\Delta(G)\) the max degree, \(\delta(G)\) the
+min degree, \(alpha(G)\) the independence number, \(\omega(G)\) the clique
+number, a subgraph, an induced subgraph, the matching number, …
 
 \subsection{The four-colors theorem}
 The four-colors theorem was first proposed by Francis Guthrie in October 1852
@@ -417,6 +422,33 @@ Lemma. In any \(3\)-edge-coloring of this graphs either left parallel edges or
 the right ones receive a same color and the other \(3\) pendant edges receive
 \(3\) distinct colors. Conversely, any such coloring of the \(5\) pendant edges
 can be extended to the whole graph.
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw (0, 0) -- (0.5, 0.5) -- (1.5, 0.5) -- (2, 0);
+    \draw (0, 3) -- (0.5, 2.5) -- (1.5, 2.5) -- (2, 3);
+    \draw (0, 1.5) -- (1, 1.5) -- (2, 1.5);
+    \draw (0.5, 0.5) -- (0, 1.5) -- (0.5, 2.5);
+    \draw (1.5, 0.5) -- (2, 1.5) -- (1.5, 2.5);
+    \draw (1, 1.5) -- (1.25, 2.2);
+  \end{tikzpicture}
+\end{center}
+
+\paragraph{The Petersen graph}
+\(3\)-regular, \(3\)-connected, \(\chi' = 4\). (Note~: could not remove vertex
+labels.)
+\begin{center}
+  \begin{tikzpicture}
+    \graph [clockwise] {
+      subgraph C_n [n=5, name=A, radius=2cm];
+      subgraph I_n [n=5, name=B, radius=1cm];
+      \foreach \i [evaluate={\j=int(mod(\i+2,5)+1);}] in {1,...,5} {
+        A \i -- B \i;
+        B \i -- B \j;
+      }
+    };
+  \end{tikzpicture}
+\end{center}
 
 \subsection{NP, NP-hard, NP-completeness}
 
