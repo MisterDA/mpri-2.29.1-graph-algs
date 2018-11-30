@@ -30,6 +30,8 @@
 \def\Z{\mathbb{Z}}
 \def\N{\mathbb{N}}
 \newtheorem{theorem}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{corollary}{Corollary}
 \newtheorem{lemma}{Lemma}
 \newtheorem{definition}{Definition}
 
@@ -1051,9 +1053,353 @@ Proof : Asume $H$ is a minor of $G$. Let $G'$ be another topological minor of $G
 
 %slide 13
 
+With a similar argument we can prove this more general result:
+
+\begin{theorem}
+For every graph $H$, there is a finite family $H$ of graphs with the property that $G$
+ contains $H$ as a minor if and only if it contains some graph in $H$ as a topological minor.
+\end{theorem}
+
+This result combined with the theorem on topological minor detection now clearly implies the following theorems due to Robertson and Seymour.
+
+\begin{theorem}[Robertson and Seymour,1995]
+Let $H$ be a fixed graph. There exists a polynomial time algorithm to decide
+whether $H$ is a minor of a given graph $G$.
+\end{theorem}
+
+And a corollary:
+
+\begin{theorem}
+If $C$ is a class of graphs defined by forbidding finitely many minors, then there
+exists a polynomial algorithm to decide whether an input graph belongs to $C$
+\end{theorem}
+
+What are the families defined by finitely many forbidden minors ?
+\begin{itemize}
+\item A trivial fact is that such families are closed under minors (every minor of a graph in the family is in the family).
+\item The celebrated Robertson and Seymour Theorem ( > 700 pages of proof (Graph Minors I-II-III .... XXV)) , solving a conjecture of Wagner from 1937
+says that this is sufficient.
+\end{itemize}
+
+\begin{theorem}[Robertson and Seymour]
+Any minor closed class of graph is defined by a finite list of forbidden minors
+\end{theorem}
+
+With an important consequence :
+
+\begin{theorem}
+If $C$ is a minor closed class, then there exists a polynomial algorithm to decide if an input
+graph belongs to $C$.
+\end{theorem}
+
 \subsection{Well Quasi Orders}
+
+\begin{definition}[Bounds]
+For a given minor closed class $C$, a graph $H$ is said to be a bound if $H$ is not in $C$
+but every strict minor of $H$ is.
+\end{definition}
+
+\begin{theorem}
+Let $C$ be a minor closed class, and $B$ be its (possibly infinite) set of bounds. Then
+$G \in C$ if and only if $G$ does not contain any graph of $B$ as a minor.
+\end{theorem}
+
+\begin{itemize}
+\item So Wagner’s conjecture is to prove that a set of bounds is always finite.
+\item Note that by definition the set of bounds forms antichain of the minor partial
+order : no bound is a minor of another bound.
+\item Is is true that every antichain is finite ?
+\end{itemize}
+
+\begin{theorem}
+The following are equivalent :
+\begin{enumerate}
+\item Every minor closed class has a finite set of bounds.
+\item There is no infinite antichain for the minor relation.
+\end{enumerate}
+\end{theorem}
+
+\begin{definition}
+A partial order $\curlyeqprec$ defined on a set $X$ is a well quasi order (WQO) if there is no
+infinite decreasing sequence and no any infinite antichain.
+\end{definition}
+
+Wagner’s conjecture is equivalent to say that the class of all graphs with the minor
+relation is a wqo.
+
+\begin{theorem}
+Let $( X , \curlyeqprec)$ be a partially ordered set and $( x_i )_{i \in \N}$ be any sequence. Then this
+sequence has a infinite subsequence that is either increasing, or decreasing or an antichain.
+\end{theorem}
+
+From this we deduce the following which gives equivalent conditions for being a
+wqo.
+
+\begin{theorem}
+Let $( X , \curlyeqprec)$ be a partially ordered set. The three assertions are equivalent :
+\begin{enumerate}
+\item $( X , \curlyeqprec)$ is a wqo
+\item from every sequence $( x_i )_{i \in \N}$ one can extract an infinite increasing
+subsequence.
+\item from every sequence $( x_i )_{i \in \N}$ one can extract $i < j$ such that $x_i \curlyeqprec x_j$.
+\end{enumerate}
+\end{theorem}
+
+This will be useful : in order to prove that a given partial order is a wqo, we will
+only prove the third statement, but when we use the fact that an order is a wqo (for
+example in a proof by induction), we can use the second statement which is (in
+appearance) much stronger.
+
+Let us illustrate this by proving that the set of words on a finite alphabet is wqo for
+the subword relation. If $X$ is a set (the alphabet) $X^∗$ denotes the set of finite words
+(ordered sequences) over $X$.
+
+\begin{theorem}
+Assume $X$ is a finite set. Define a partial order $\curlyeqprec$ on $X^∗$ by $u \curlyeqprec v$ if $u$ is a subword
+of $v$ ($u$ can be obtained from $v$ by deletion of letters). Then $( X , \curlyeqprec)$ is a wqo.
+\end{theorem}
+
+Higman Theorem replaces the finite alphabet by a WQO one
+\begin{theorem}[Higman, 1952]
+Let $( X , \curlyeqprec)$ be a wqo. Define a partial order on $X^∗$ by $x_1 x_2 . . . x_k  \curlyeqprec  y_1 y_2 . . . y_l$ if there
+exists an increasing injection $f : { 1 , . . . , k } → { 1 , . . . , l }$ such that for every $i$,
+$x_i \curlyeqprec  y_{f ( i )}$ . Then $( X , \curlyeqprec)$ is also a wqo.
+\end{theorem}
+
+Note that it implies the previous one : if X is finite, it suffices to consider on X the
+partial order where no two elements are comparable - it clearly defines a wqo.
+
+A famous result from Kruskal is that finite trees are well quasi ordered for the
+topological minor relation. Here we prove a stronger result.
+
+\begin{definition}
+Let $( X , \curlyeqprec)$ be a WQO. Let $T$ and $T'$ two rooted trees whose vertices are labelled
+by $T$. We say that $T \curlyeqprec T'$ if :
+there exists a subdivision $T''$ of $T$ with an isomorphism $\phi$ between $T''$ to a
+subgraph of $T'$ such that :
+\begin{itemize}
+\item $\phi$ preserves the tree order : if $x$ is a ancestor of $y$ in $T$ , then $\phi( x )$ is an
+ancestor of $\phi( y )$ in $T'$.
+\item $\phi$ preserves the labels : for every vertex $x$ of $T$ , $label( x )  \curlyeqprec label(\phi( x ))$ (we
+don’t consider for this the vertices of $T''\ T$ obtained by subdivisions, they
+don’t have any label anyway)
+\end{itemize}
+\end{definition}
+
+(If $| X | = 1$ this is the topological minor relation for rooted trees. Restricted to
+paths, this is exactly the partial order defined on words in Higman’s Theorem.)
+
+\begin{theorem}[Kruskal]
+The order defined above is a well quasi order on labelled rooted trees.
+\end{theorem}
+
+
 \subsection{TreeWidth}
+
+\begin{definition}
+\begin{itemize}
+\item Let $G$ be a graph. A tree decomposition of $G$ is a pair $( T , W )$ , where $T$ is a
+tree and $W = ( W_t )_{t \in V ( T )}$ a collection of subsets of $V ( G )$ satisfying :
+For every $u \in V ( G )$ , $T_u = { t \in V ( T ) , u \in W_t }$ induces a connected subgraph of
+$T$ .
+For every edge $uv \in E ( G ) , T_u \cap T_v \neq \emptyset$ .
+\item The \textbf{width} of a tree decomposition is $max_{t \in V ( T )}(| W_t | − 1 )$.
+\item The \textbf{tree width} of a graph $G$, denoted $tw ( G )$ , is the minimum width of a tree
+decomposition of $G$.
+\end{itemize}
+\end{definition}
+
+Equivalently, a tree decomposition of G is a tree T along with a collection of
+subtrees $T_v$ , one for each vertex of $G$, with the condition that $T_u$ and $T_v$ intersect if
+$uv$ is an edge of $G$. Note that is not a equivalence, it is possible that $T u \cap T v \neq \emptyset$
+even if $uv \notin E ( G )$ (this will be the case for chordal graphs).
+
+Here is a key lemma regarding subtree intersection ; by analogy with Helly’s
+Theorem on convex subsets of $\R ^ d$ , this property is often called Helly property of
+subtrees of a tree.
+
+\begin{lemma}
+Let $F$ be a collection of pairwise intersecting subtrees of a given tree $T$ . Then
+$\bigcap_{T \in F} T \neq \emptyset$ .
+\end{lemma}
+
+\begin{corollary}
+$tw( G ) \geq \omega( G ) - 1$  ($\omega( G )$ is the clique number)
+\end{corollary}
+
+TreeWidth and Chromatic Number:
+
+\begin{prop}
+For every graph $G$, there exists a tree decomposition of width $tw( G )$ such that for
+every edge $st \in E ( T )$ , $W_s \not\subset W_t$ and $W_t \not\subset W_s$ . In particular, for every leaf
+$f \in V ( T )$ , there exists a vertex $u \in V ( G )$ such that $T_u = \{ f \}$ .
+\end{prop}
+
+\begin{theorem}
+In every graph $G$, there exists a vertex of degree at most $tw( G )$ .
+\end{theorem}
+
+\begin{corollary}
+$\chi( G ) ≤ tw( G ) + 1$
+\end{corollary}
+
+TreeWidth and Chordal graphs:
+\begin{definition}
+A graph $G$ is chordal if it has no induced subgraph isomorphic to a cycle of length
+at least 4.
+\end{definition}
+
+\begin{theorem}
+The following statement are equivalent
+\begin{enumerate}
+\item $G$ is chordal.
+\item Every induced subgraph of $G$ contains a simplicial vertex, i.e. a vertex
+whose neighbourhood is a clique.
+\item $G$ is the intersection graph of a family of subtrees of a tree.
+\end{enumerate}
+\end{theorem}
+
+Using this characterisation, one gets this equivalent definition of treewidth.
+
+\begin{prop}
+$tw( G ) = min{ω( G' ) − 1 , G subgraph of G' and G' is chordal }$.
+\end{prop}
+
+TreeWidth and Minors:
+\begin{prop}
+If $H$ is a minor of $G$, then $tw( H ) ≤ tw( G )$
+\end{prop}
+
+\begin{corollary}
+The class of graphs of treewidth at most $k$ is closed under taking minors.
+\end{corollary}
+
+
+Bounds for TreeWidth:
+
+Therefore, using the theorem of Robertson and Seymour, we know that it is
+defined by a finite number of excluded minors. In fact, this result is not a
+consequence of their theorem, but one of its steps, as this result can be proven
+directly using the ideas of the proof of Kruskal Theorem.
+
+\begin{theorem}
+The class of graphs of treewidth at most $k$ is well quasi order for the minor relation.
+\end{theorem}
+
+\begin{corollary}
+The class of graphs of treewidth at most $k$ has a finite number of bounds.
+\end{corollary}
+
+Small TreeWidth
+
+Let us try to describe the bounds for small values of k .
+
+\begin{theorem}
+$tw( G ) \leq 1$ $\Leftrightarrow$ $G$ is a forest $\Leftrightarrow$ $G$ does not contain $K_3$ as a minor\\
+$tw( G ) \leq 2$ $\Leftrightarrow$ $G$ does not contain $K_4$ as a minor\\
+\end{theorem}
+
+Proof :
+\begin{itemize}
+\item The proof for $tw( G ) = 2$ shows the role of separators with treewidth.
+\item One could hope for a general result $tw( G ) = k$ iff G does not have a $K_{k + 2}$
+minor. FALSE
+\item There exists graphs with no $K_5$ minor (and as we will see soon, planar graphs)
+with arbitrarily high treewidth.
+\end{itemize}
+
+There are in fact four bounds for tree width at most 3. $O$ is the octahedron, $W_8$ is
+the cycle on 8 vertices where all edges linking diametrically opposite nodes are
+added, and $C_5 \times K_2$ is the pentagonal prism (two $C_5$ joined by a perfect matching).
+
+\begin{theorem}
+$tw( G ) \leq 3$ $\Leftrightarrow$ $G$ does not contain one of the four following graphs as as a minor :
+$K_5$ ,$W 8$ , $O$ and $C_5 \times K_2$.
+\end{theorem}
+
+Digression : Hadwiger Conjecture
+
+We have already proven these two sets of inequalities: 
+$$ \omega( G ) \leq \chi( G ) \leq tw( G ) + 1$$
+$$ \omega( G ) \leq \omega_m ( G ) \leq tw( G ) + 1$$
+where $\omega_m ( G )$ denotes the largest integer $k$ such that $G$ has a $K_k$ minor.
+
+Conjecture (Hadwiger) : $\chi( G ) \leq \omega_m ( G )$\\
+\begin{itemize}
+\item It is trivial that $\omega_m ( G ) \leq 2$ $\Leftrightarrow$ $G$ is a forest $\Rightarrow$ $\chi( G ) \leq 2$.
+\item We saw $\omega_m ( G ) \leq 3$ $\Leftrightarrow$ $tw( G ) \leq 2$ which implies $\chi( G ) \leq 3$ by the above
+inequalities.
+\item $\omega_m ( G ) \leq 4$ $\Rightarrow$ $\chi( G ) \leq 4$ contains the Four Colour Theorem since planar
+graphs are $K_5$ -minor free. In fact it is equivalent (and hence true), thanks to a
+structural characterisation of graphs with no $K_5$ minor due to Wagner.
+\end{itemize}
+
+
 \subsection{Tree Decomposition and Separators}
+Separators:
+
+\begin{prop}
+Let $( T , W )$ be a tree decomposition of $G$ and $t_1$ $t_2$ be an edge of $T$ and denote by
+$S$ the set of vertices $W_{t_1} \cap W_{t_2}$. For $i = 1 , 2$, define $T_i$ as the connected component
+of $T \backslash t_1 t_2$ containing $t_i$ , and $G_i$ the subgraph of $G$ induced by $\bigcap_{t \in T_i} ( W_t \backslash S )$ . Then
+there are no edges between $G_1$ and $G_2$ .
+\end{prop}
+
+Conversely, we have the following result about cutsets that induce complete
+graphs.
+
+\begin{prop}
+Let $G$ be a graph with a clique cutset $S$ and let $( X_i )_{i \in I}$ be the connected
+components of $G \ S$. Define $H_i$ to be the graph induced by $X_i \cap S$. Then
+$tw( G ) = max_{i \in I} (tw( H_i ))$.
+\end{prop}
+
+Clique Sums:
+
+\begin{definition}
+Let $G_1$ and $G_2$ be two graphs and $K_1$ a clique of $G_1$ , $K_2$ a clique of $G_2$ with
+$| K_1 | = | K_2 |$ . If $G$ is a graph obtained by identifying vertices of $K_1$ and $K_2$ , and then
+removing some edges of this clique, then $G$ is a clique sum of $G_1$ and $G_2$ .
+\end{definition}
+
+The previous proposition can be restated in terms of clique sums.
+
+\begin{prop}
+If $G$ is a clique sum of $G_1$ and $G_2$ , then $tw( G ) \leq max(tw( G 1 ), tw( G 2 ))$ .
+\end{prop}
+
+And another characterization of treewidth
+
+\begin{prop}
+$G$ has treewidth at most $k$ if and only if it can be constructed recursively by clique
+sum operations starting from graphs on at most $k + 1$ vertices.
+\end{prop}
+
+Another Result about separators
+
+This proposition will also be very useful to design algorithms.
+\begin{prop}
+Let $G$ be a graph of tree width $k$ . Then there exists a subset $X \subset V ( G )$ such that :
+\begin{itemize}
+\item $X$ is a cutset of $G$
+\item $X$ has size at most $k + 1$
+\item no connected component of $G \backslash X$ has size larger than $| V ( G )|/ 2$
+\end{itemize}
+\end{prop}
+
+This also permits to prove that the $2k \times 2k$-grid has treewidth at least $k$ (in fact we
+will prove later that its treewidth is $2k$ ).
+
+\begin{corollary}
+The treewidth of the grid $G_2k$ , $2k$ is at least $k$.
+\end{corollary}
+
+\begin{corollary}
+The class of planar graph has unbounded treewidth.
+\end{corollary}
+
+%38 => 73 To do
+
 \subsection{Duality --- Cops and Robber}
 \subsection{Computing Tree Decomposition's}
 \subsection{Treewidth and Planar Graphs}
@@ -1063,5 +1409,78 @@ Proof : Asume $H$ is a minor of $G$. Let $G'$ be another topological minor of $G
 
 
 \section{Spectral graph theory}
+
+Find combinatorial properties with linear algebra.\\
+
+$M^*_{i,j} = \bar{M_{j,i}}$.\\
+
+Spectral theorem : $n$ eigenvalues in a graph of size $n$.\\
+
+In a $d$-regular graph, we have the maximum eigenvalue equal to $d$.\\
+
+Spectral theorem: if we have a matrix real and symmetric, the eigen values are
+real, and we have $n$ eigenvalues.\\
+
+On a $d$-regular matrix, the laplaciant matrix is $L = D - A$, with $D$ the
+diagonal matrix with only $d$, and $A$ the matrix representing the graph.\\
+
+$x^TLx = \sum_{(i,j) \in E} (x_i - x_j)^2$.\\
+$R_M(X) = \frac{X^TMX}{X^TX}$.\\
+$\lambda_k = \min_{V space, k-dim}\max_{x \in V, x \neq 0}R_M(x)$.\\
+
+$\lambda_k \geq 0$\\
+$\lambda_1 = \min_{x \neq 0} R_M(x)$\\
+$\lambda_2 = 0$, and $X_2 \neq 1$ if the graph is disconnected.\\
+
+$\lambda_n = 2$ in the normalized laplacian if and only if the graph is
+bipartite.\\
+
+
+edge expansion of $S$ : $\emptyset(S) = \frac{E(S,V-S)}{d|S|}$\\
+$\emptyset(G) = \min_{|S| < |V|/2}\emptyset(S)$.\\
+We have $\lambda_2/2 \leq \emptyset(G) \leq \sqrt{2 \lambda_2}$.
+
+%\subsection{Second class}
+
+$L = I - \frac{1}{d}A$ is the laplacian, where $A$ is the matrix associated with
+the graph.
+
+$x^TLx = \sum_{(u,v) \in E}(X_u - X_v)^2$
+
+$R_M(x) = \frac{x^TMx}{x^Tx}$
+
+$\lambda_1 = \min_{x \neq 0} R_L(x)$. We thus have that $\lambda_1 = 0$ and $X_1
+= 1$\\
+
+$\lambda_k = \min_{x \neq 0, X \text{ ind } X_1,...,X_{k-1}}R_L(X)$.
+$\lambda_k = 0$ if $G$ has $k$ connected components.\\
+
+$\lambda_n = 2$ in the normalized laplacian if and only if the graph is
+bipartite.\\
+
+\subsection{Sparsity}
+
+$\sigma(S) = \frac{2|V|^2 |E(S,V-S)|}{|E||S||V-S|}$
+
+$\sigma(G) = \min_S \sigma(S)$ is the sparsity factor of a graph.
+
+$\emptyset(G) \leq \sigma(S) \leq \emptyset(G)$. So sparsity and expansion are
+near each other.\\
+
+\begin{theorem}{}{}
+  $\sigma(G) \geq \lambda_2$.
+\end{theorem}
+\begin{proof}
+  We do a relaxation of the problem to prove that.\\
+  $\sigma(G) = \min_{\{0,1\}^n} \frac{|V|\sum_{(u,v) \in E}(x_u - x_v)^2}{d
+    \sum_{(u,v)}(x_u-x_v)^2}$\\
+\end{proof}
+
+$\frac{\lambda_2}{2} \leq \emptyset(G) \leq \sqrt{2 \lambda_2}$
+
+\subsection{Notes}
+
+Luca Trevisan -> Lecture notes -> Expanders (142 pages)
+
 
 \end{document}
