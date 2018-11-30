@@ -72,7 +72,7 @@ most four colors.
   planar graph is 3-edge-colorable.
 \end{enumerate}
 
-Exercise. Prove using thoses two formulations that that \(K_{3,3}\) and \(K_5\)
+Exercise. Prove using those two formulations that that \(K_{3,3}\) and \(K_5\)
 are not planar graphs.  Project: study the best known algorithms to decide if a
 given graph is planar.
 
@@ -128,7 +128,7 @@ colors are the non-zero (corresponds to \enquote{proper}) elements
   \end{figure}
 \end{proof}
 
-Many theories were developped to prove the four-colors theorem, among them:
+Many theories were developed to prove the four-colors theorem, among them:
 
 \begin{wrapfigure}{r}{0.5\textwidth}
   \begin{center}
@@ -137,7 +137,7 @@ Many theories were developped to prove the four-colors theorem, among them:
     \draw (-1.2,.1) to[bend right] (1.2,.1);
     \draw[rotate=0] (0,0) ellipse (100pt and 50pt);
   \end{tikzpicture}
-  \caption{Embbeding on a torus}
+  \caption{Embedding on a torus}
   \end{center}
 \end{wrapfigure}
 
@@ -923,44 +923,60 @@ graphs.
 
 \section{Introduction to Minors, TreeWidth and FPT algorithms}
 \subsection{Three Algorithmic Problems}
-Consider the following problem of connectivity :
+Consider the following problem of connectivity:
 
 \vspace{0.2cm}
 \noindent \textbf{Problem}: $k$ disjoint path problem\\
-\textbf{Input:} A graph $G$, an integer $k$ and two subsets of vertices $A$ and $B$ of size $k$\\
-\textbf{Output:} TRUE if there exists $k$ vertex disjoint paths from $A$ to $B$ ?\\
+\textbf{Input:} A graph $G$, an integer $k$ and two subsets of vertices $A$ and
+$B$ of size $k$\\
+\textbf{Output:} TRUE if there exists $k$ vertex disjoint paths from $A$ to $B$?\\
 \vspace{0.2cm}
 
-\noindent It's a classic problemn that can be solved in time $O(k|E(G)|)$ by a variant of the Ford-Fulkerson Algorithm.
-The maximum value $k$ corresponds to a minimum vertex cut separating $A$ and $B$ and is a classical result of \textit{Menger}.
+\noindent It's a classic problem that can be solved in time $O(k|E(G)|)$ by a
+variant of the Ford-Fulkerson Algorithm.  The maximum value $k$ corresponds to a
+minimum vertex cut separating $A$ and $B$ and is a classical result of
+\textit{Menger}.
 
 \begin{theorem}[Menger]
-Let $x$ and $y$ be distinct vertices of a graph $G$. Then the minimum number of vertices whose deletion separates $x$ from $y$ is equal to the maximum number of internally disjoint paths between $x$ and $y$.
+  Let $x$ and $y$ be distinct vertices of a graph $G$.  Then the minimum number
+  of vertices whose deletion separates $x$ from $y$ is equal to the maximum
+  number of internally disjoint paths between $x$ and $y$.
 \end{theorem}
 
-\noindent From there we can move on to a smilingly similar problem :
+\noindent From there we can move on to a smilingly similar problem:
 
 \vspace{0.2cm}
 \noindent \textbf{Problem}: $k$ disjoint rooted path problem\\
-\textbf{Input:} A graph $G$, an integer $k$ and two subsets of vertices $X=\{x_1, x_2, ..., x_k\}$ and $Y=\{y_1, y_2, ..., y_k\}$ of size $k$\\
-\textbf{Output:} TRUE if there exists disjoint paths $P_1, P_2, ..., P_k$ such that $P_i$ is a path from $x_i$ to $y_i$ ?
+\textbf{Input:} A graph $G$, an integer $k$ and two subsets of vertices
+$X=\{x_1, x_2, \ldots, x_k\}$ and $Y=\{y_1, y_2, \ldots, y_k\}$ of size $k$\\
+\textbf{Output:} TRUE if there exists disjoint paths $P_1, P_2, \ldots, P_k$ such
+that $P_i$ is a path from $x_i$ to $y_i$?
 \vspace{0.2cm}
 
-\noindent This problem is related to commodity flow problem, and has many applications. With $k$ being part of the input, this problem is NP-complete, even when restricted to the class of planar graphs. Nevertheless, in the Graph Minor series of papers, \textit{Robertson and Seymour} proved a polynomial algorithm for fixed $k$.
+\noindent This problem is related to commodity flow problem, and has many
+applications.  With $k$ being part of the input, this problem is NP-complete,
+even when restricted to the class of planar graphs.  Nevertheless, in the Graph
+Minor series of papers, \textit{Robertson and Seymour} proved a polynomial
+algorithm for fixed $k$.
 
 \begin{theorem}[Robertson-Seymour]
 The $k$-disjoint path problem can be solved in time $O(f(k).n^3)$
 \end{theorem}
 
-And this result was later improved to quadratic time by \textit{ Kawabayarashi, Kobashi and Reed}.
+And this result was later improved to quadratic time by \textit{ Kawabayarashi,
+  Kobashi and Reed}.
 
 \begin{definition}[Topological minor]
- A graph $H$ is \textbf{topological minor} of a graph $G$ if there exists a injective mapping $f$ from $V(H)$ to $V(G)$ such that for each edge $uv$ of $H$, there exists in $G$ a path $P_{uv}$ connecting $f(u)$ and $f(v)$ in $G$ with the property that all these path are internally disjoint.
+  A graph $H$ is \textbf{topological minor} of a graph $G$ if there exists a
+  injective mapping $f$ from $V(H)$ to $V(G)$ such that for each edge $uv$ of
+  $H$, there exists in $G$ a path $P_{uv}$ connecting $f(u)$ and $f(v)$ in $G$
+  with the property that all these path are internally disjoint.
 \end{definition}
 
 %exercise slide 5
 
-\noindent With this definition in mind we can move on to another algorithmic problem:
+\noindent With this definition in mind we can move on to another algorithmic
+problem:
 
 \vspace{0.2cm}
 \noindent \textbf{Problem}: Topological $H$-minor detection\\
@@ -968,22 +984,32 @@ And this result was later improved to quadratic time by \textit{ Kawabayarashi, 
 \textbf{Output:} TRUE if $H$ is a topological minor of $G$, FALSE otherwise.
 \vspace{0.2cm}
 
-\noindent 
-With $H$ part of the input, the problem is NP-complete. But with $H$ fixed the problem is polynomial thanks to the $k$-disjoint path problem algorithm.
+\noindent
+With $H$ part of the input, the problem is NP-complete.  But with $H$ fixed the
+problem is polynomial thanks to the $k$-disjoint path problem algorithm.
 
 \begin{theorem}
-Let $H$ be a fixed graph. There exists a polynomial time algorithm to decide whether $H$ is a topological minor of a given graph $G$.
+  Let $H$ be a fixed graph.  There exists a polynomial time algorithm to decide
+  whether $H$ is a topological minor of a given graph $G$.
 \end{theorem}
 
-The complexity of the algorithm is in $O(f(k)n^k)$ where $k=|H|$ and $n=|G|$, therefore polynomial for every fixed $k$. Later, in 2010, \textit{Grohe, Kawabarayashi, Marx, and Wollan} proverd much better $O(f(k)n^3)$. Such an algorithm is called Fixed Parameter Tractable (FPT) algorithm, but we'll come back to that later on.
+The complexity of the algorithm is in $O(f(k)n^k)$ where $k=|H|$ and $n=|G|$,
+therefore polynomial for every fixed $k$. Later, in 2010, \textit{Grohe,
+  Kawabarayashi, Marx, and Wollan} proved much better $O(f(k)n^3)$.  Such an
+algorithm is called Fixed Parameter Tractable (FPT) algorithm, but we'll come
+back to that later on.
 
-In particular, the previous theorem implies that any family of graphs that is defined with a forbidden FINITE family of graphs as topological minors is polynomially testable. Here is an example of such class :
+In particular, the previous theorem implies that any family of graphs that is
+defined with a forbidden FINITE family of graphs as topological minors is
+polynomially testable.  Here is an example of such class:
 
 \begin{theorem}[Kuratowski,1930]
-A graph $G$ is planar if and only if it does not contain $K_5$ or $K_{3,3}$ as a topological minor.
+  A graph $G$ is planar if and only if it does not contain $K_5$ or $K_{3,3}$ as
+  a topological minor.
 \end{theorem}
 
-But one does not need Robertson and Seymour Theorem to get polytime algorithms for recognizing planar graphs (there exist even linear algorithms to do that)
+But one does not need Robertson and Seymour Theorem to get poly-time algorithms
+for recognizing planar graphs (there exist even linear algorithms to do that).
 
 \subsection{Minors}
 
@@ -1027,9 +1053,9 @@ Proof : Asume $H$ is a minor of $G$. Let $G'$ be another topological minor of $G
 
 \subsection{Well Quasi Orders}
 \subsection{TreeWidth}
-\subsection{Tree Decompositions and Separators}
-\subsection{Duality - Cops and Robber}
-\subsection{Computing Tree Decompositions}
+\subsection{Tree Decomposition and Separators}
+\subsection{Duality --- Cops and Robber}
+\subsection{Computing Tree Decomposition's}
 \subsection{Treewidth and Planar Graphs}
 \subsection{Graphs are WQO}
 \subsection{Algorithms for bounded-treewidth graphs}
