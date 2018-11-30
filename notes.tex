@@ -30,6 +30,7 @@
 \def\Z{\mathbb{Z}}
 \def\N{\mathbb{N}}
 \newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
 \newtheorem{definition}{Definition}
 
 \begin{document}
@@ -985,6 +986,45 @@ A graph $G$ is planar if and only if it does not contain $K_5$ or $K_{3,3}$ as a
 But one does not need Robertson and Seymour Theorem to get polytime algorithms for recognizing planar graphs (there exist even linear algorithms to do that)
 
 \subsection{Minors}
+
+Let's agree on the vocabulary first : We define 3 operation on a graph $G$
+\begin{enumerate}
+
+\item \textbf{Remove a vertex} $v$ (and all its incident edges), denoted $G \textbackslash v$.
+\item \textbf{Remove a edge} $e$ (but not it's end vertices), denoted $G \textbackslash e$.
+\item \textbf{Contract an edge} $e=xy$ (ie remove $x$ and $y$ and merge them), denoted $G/e$. 
+\end{enumerate}
+A contraction $G/e$ is \textbf{topological} if one of it's endpoints has degree 2. It's inverse is the \textbf{subdivision operation} which consists in removing an edge $xy$ adding a new vertex $z$ and adding the edges $xz$ and $yz$.
+
+\begin{definition}
+Let $G$ and $H$ be two graphs :
+\begin{itemize}
+\item $H$ is an \textbf{induced subgraph} of $G$ if $H$ is obtained from $G$ by the repeated use of 1.
+\item $H$ is a \textbf{subgraph }of $G$ if $H$ is obtain by the repeated use of 1 and 2.
+\item $H$ is a \textbf{spanning subgraph} of $G$ if $H$ is obtained from $G$ by the repeated use of 2.
+\item $H$ is a \textbf{minor} of $G$ if $H$ obtained from $G$ by the repeated use of rule 1,2 and 3.
+\item $H$ is a \textbf{topological minor}  of $G$ if $H$ is a minor of $G$ and every contraction used was topological.
+\end{itemize}
+\end{definition}
+
+Here is an equivalent but more useful of minors :
+
+\begin{lemma}
+Let $G$ and $H$ be two graphs and denote $V(H) = {v_1 , ... , v_p}$. Then $H$ is a minor of $G$ if and only if there exists $p$ connected and disjoint subgraphs $G_1, ... , G_p$ of $G$ such that for every edge $v_iv_j$ of $H$ there exist an edge between $G_i$ and $G_j$
+\end{lemma}
+
+%exercices slide 11
+
+Let's get a closer look at topological minors compared to minors : y definiton if $H$ is a topological minor of $G$ $\implies$ $H$ is a minor of $G$ but the converse is not true (exercise). However when $H$ is of small maximum degree, this is nevertheless true.
+
+\begin{theorem}
+Let $H$ be a graph with maximum degree at most 3. Then a graph G has an $H$-minor if and only if it contains an $H$-subdivision (topological minor).
+\end{theorem}
+
+Proof : Asume $H$ is a minor of $G$. Let $G'$ be another topological minor of $G$ minimal (in the number of edges) such that $H$ is a minor of $G'$. Use the previous lemma, each $G_i$ is a tree with at most 3 leaves and no vertex of degree 2. Each such tree must be a star, so we get the topological minor.
+
+%slide 13
+
 \subsection{Well Quasi Orders}
 \subsection{TreeWidth}
 \subsection{Tree Decompositions and Separators}
@@ -994,6 +1034,7 @@ But one does not need Robertson and Seymour Theorem to get polytime algorithms f
 \subsection{Graphs are WQO}
 \subsection{Algorithms for bounded-treewidth graphs}
 \subsection{FPT parametrized by size of the solution}
+
 
 \section{Spectral graph theory}
 
