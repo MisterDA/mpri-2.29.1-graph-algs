@@ -1018,7 +1018,7 @@ Let's agree on the vocabulary first : We define 3 operation on a graph $G$
 
 \item \textbf{Remove a vertex} $v$ (and all its incident edges), denoted $G \textbackslash v$.
 \item \textbf{Remove a edge} $e$ (but not it's end vertices), denoted $G \textbackslash e$.
-\item \textbf{Contract an edge} $e=xy$ (ie remove $x$ and $y$ and merge them), denoted $G/e$. 
+\item \textbf{Contract an edge} $e=xy$ (ie remove $x$ and $y$ and merge them), denoted $G/e$.
 \end{enumerate}
 A contraction $G/e$ is \textbf{topological} if one of it's endpoints has degree 2. It's inverse is the \textbf{subdivision operation} which consists in removing an edge $xy$ adding a new vertex $z$ and adding the edges $xz$ and $yz$.
 
@@ -1052,7 +1052,34 @@ Proof : Asume $H$ is a minor of $G$. Let $G'$ be another topological minor of $G
 %slide 13
 
 \subsection{Well Quasi Orders}
+\begin{definition}[bounds]
+  For a given minor closed class \(C\), a graph \(H\) is said to be a bound if
+  \(H\) is not in \(C\) but every strict minor of \(H\) is.
+\end{definition}
+
+\begin{definition}[wqo]
+  A partial order \(\preccurlyeq\) defined on a set X is a well quasi order
+  (WQO) if there is no infinite decreasing sequence and no any infinite
+  antichain.
+\end{definition}
+
 \subsection{TreeWidth}
+\begin{definition}
+  \begin{itemize}
+  \item Let \(G\) be a graph.  A tree decomposition of \(G\) is a pair \(T, W\),
+    where \(T\) is a tree and \(W = {(W_t)}_{t\in V(T)}\) a collection of subsets
+    of \(V(G)\) satisfying:
+    \begin{itemize}
+    \item For every \(u \in V(G)\), \(T_u = \{t \in V(T), u \in W_t\}\) induces
+      a connected subgraph of \(T\).
+    \item For every edge \(uv \in E\), \(T_u \cap T_v \neq \emptyset\)
+    \end{itemize}
+  \item The width of a tree decomposition is \(\max_{t\in V(T)}(|W_t| - 1)\)
+  \item The tree width of a graph \(G\), denoted \(tw(G)\), is the minimum width
+    of a tree decomposition of \(G\).
+  \end{itemize}
+\end{definition}
+
 \subsection{Tree Decomposition and Separators}
 \subsection{Duality --- Cops and Robber}
 \subsection{Computing Tree Decomposition's}
